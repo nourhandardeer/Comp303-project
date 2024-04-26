@@ -1,10 +1,12 @@
 // App.js
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground  } from 'react-native';
 
 export default function App() {
   return (
     <View style={styles.container}>
+        <ImageBackground source={{uri: 'https://i.pinimg.com/564x/c4/5e/be/c45ebe25e9dcaffb25321ef98960c5e2.jpg'}} style={styles.background} >
+
       <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
         
@@ -26,7 +28,9 @@ export default function App() {
       <View style={styles.footer}>
         <Text style={styles.footerText}>&copy; 2024 Your App. All rights reserved.</Text>
       </View>
+      </ImageBackground>
     </View>
+
   );
 }
 
@@ -35,12 +39,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  background: {
+    flex: 1,
+    resizeMode: 'cover', 
+    justifyContent: 'center', 
+  },
   header: {
-    backgroundColor: '#333',
+    backgroundColor: 'transparent',
     padding: 20,
     alignItems: 'center',
     flexDirection: 'row', 
     justifyContent: 'space-between', 
+    
   },
   headerText: {
     color: '#fff',
