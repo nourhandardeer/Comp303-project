@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/Config';
-import { doc, setDoc } from "firebase/firestore"; 
+import {  setDoc, doc } from "firebase/firestore"; 
 
 const backgroundImage = require('../assets/images/backgroundImage.jpg');
 

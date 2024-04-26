@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
