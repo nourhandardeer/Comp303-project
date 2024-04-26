@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: "#333",
     marginBottom: 30,
-    fontFamily: "SF Pro Display", // Use SF Pro Display font
+    fontFamily: "Futura-CondensedMedium", // Use SF Pro Display font
     fontWeight: 'bold',
   },
   input: {

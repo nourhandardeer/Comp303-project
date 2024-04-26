@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#D67808',
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: 'bold',
   },
   headerButtons: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     marginBottom: 10,
     color:'#FEFEFE',
-    fontFamily:'freight display pro',
+    fontFamily:'Futura-CondensedMedium',
     justifyContent: 'center',
     alignItems: 'center',
   },

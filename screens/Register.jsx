@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: "#333",
     marginBottom: 30,
-    fontFamily: "SF Pro Display", // Use Helvetica Neue font
+    fontFamily: "Futura-CondensedMedium", // Use Helvetica Neue font
     fontWeight: 'bold',
   },
   input: {
