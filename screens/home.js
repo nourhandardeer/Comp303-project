@@ -21,7 +21,7 @@ export default function App() {
       </View>
       
       <View style={styles.hero}>
-        <Text style={styles.heroText}>Welcome </Text>
+        <Text style={styles.heroText}>THE ANCIENT WORLD </Text>
         <Text></Text>
       </View>
       
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
   heroText: {
     fontSize: 24,
     marginBottom: 10,
+    color:'#AD764A',
+    fontFamily:'freight display pro',
   },
   button: {
     backgroundColor: '#385D6A',
