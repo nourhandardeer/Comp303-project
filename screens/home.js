@@ -1,6 +1,7 @@
 // App.js
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground  } from 'react-native';
+import { router } from 'expo-router';
 
 export default function App() {
   return (
@@ -11,12 +12,13 @@ export default function App() {
         <Text style={styles.headerText}>EgyptToGo</Text>
         
         <View style={styles.headerButtons}>
-          <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => router.replace("/account/login")}>
             <Text style={styles.buttonText}>SignIn</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} >
+          <TouchableOpacity style={styles.button} onPress={() => router.replace("/account/register")} >
             <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
+
         </View>
       </View>
       
