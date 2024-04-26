@@ -21,8 +21,10 @@ export default function App() {
       </View>
       
       <View style={styles.hero}>
-        <Text style={styles.heroText}>THE ANCIENT WORLD </Text>
-        <Text></Text>
+        <Text style={styles.heroText}>THE ANCIENT WORLD  </Text>
+        <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
+        <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
+
       </View>
       
       <View style={styles.footer}>
@@ -67,10 +69,18 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heroText: {
-    fontSize: 24,
+    fontSize: 30,
     marginBottom: 10,
     color:'#AD764A',
     fontFamily:'freight display pro',
+  },
+  qouteText: {
+    fontSize: 40,
+    marginBottom: 10,
+    color:'#FEFEFE',
+    fontFamily:'freight display pro',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#385D6A',
