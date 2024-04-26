@@ -1,21 +1,21 @@
+// App.js
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
 
-
 export default function App() {
   return (
     <View style={styles.container}>
-        <ImageBackground source={require('../assets/images/main.jpg')} style={styles.background} >
+        <ImageBackground source={{uri: 'https://i.pinimg.com/564x/c4/5e/be/c45ebe25e9dcaffb25321ef98960c5e2.jpg'}} style={styles.background} >
 
       <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
         
         <View style={styles.headerButtons}>
-        <Pressable style={styles.button} onPress={() => router.replace("/account/login")}>
+        <Pressable style={styles.button} onPress={() => router.replace("/login")}>
             <Text style={styles.buttonText}>SignIn</Text>
           </Pressable>
-          <Pressable style={styles.button} onPress={() => router.replace("/account/register")} >
+          <Pressable style={styles.button} onPress={() => router.replace("/register")} >
             <Text style={styles.buttonText}>SignUp</Text>
           </Pressable>
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#D67808',
-    fontSize: 35,
+    fontSize: 40,
     fontWeight: 'bold',
   },
   headerButtons: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     marginBottom: 10,
     color:'#FEFEFE',
-    fontFamily:'Futura-CondensedMedium',
+    fontFamily:'freight display pro',
     justifyContent: 'center',
     alignItems: 'center',
   },

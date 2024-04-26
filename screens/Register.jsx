@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/Config';
-import {  setDoc, doc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore"; 
+import{ router } from "expo-router"
 
-const backgroundImage = require('../assets/images/backgroundImage.jpg');
+const backgroundImage = require('../assets/images/sign.jpeg');
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ const Register = () => {
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
         <View style={styles.overlay}>
-          <Text style={styles.registerText}>Signup</Text>
+          <Text style={styles.registerText}>Sign up</Text>
           <TextInput
             placeholder="Email"
             value={email}
@@ -52,13 +53,15 @@ const Register = () => {
             secureTextEntry
             style={styles.input}
           />
-          <Button title="Register" onPress={handlePress} />
-          <Pressable onPress={()=>router.replace("/account/login")}>
+          <Pressable  onPress={handlePress}  style={styles.signupButton} >
+             <Text style={styles.signupText}>Register</Text>
+            </Pressable>
+          {/* <Pressable onPress={()=>router.replace("/account/login")}>
             <Text style={styles.link}>Login</Text>
-          </Pressable>
-          <Pressable onPress={()=>router.replace("/account/forgot")}>
+          </Pressable> */}
+          {/* <Pressable onPress={()=>router.replace("/account/forgot")}>
             <Text style={styles.link}>Forgot Password</Text>
-          </Pressable>
+          </Pressable> */}
           <Text style={styles.error}>{error.code}</Text>
         </View>
       </View>
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: 'rgba(210, 180, 140, 0.4)',
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
@@ -93,11 +96,11 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   registerText: {
-    fontSize: 36,
-    fontWeight: "bold",
+    fontSize: 26,
     color: "#333",
     marginBottom: 30,
-    fontFamily: "Arial Rounded MT Bold",
+    fontFamily: "SF Pro Display", // Use Helvetica Neue font
+    fontWeight: 'bold',
   },
   input: {
     width: "100%",
@@ -120,6 +123,17 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     fontFamily: "Arial",
+  },
+
+  signupButton: {
+    backgroundColor: '#D2B48C', // Custom background color (beige)
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+  },
+  signupText: {
+    fontWeight: 'bold', // Make the text bold
+    fontSize:16
   },
 });
 

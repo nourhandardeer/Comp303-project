@@ -8,7 +8,7 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { sendPasswordReset} from "../firebase/auth"; // Import only auth from your Firebase configuration
+import { sendPasswordReset} from "../firebase/auth";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async () => {
     try {
-      await sendPasswordReset(email); // Use sendPasswordResetEmail directly
+      await sendPasswordReset(email);
       setMessage("Password reset email sent. Check your inbox.");
     } catch (error) {
       console.error("Error sending password reset email:", error);
@@ -26,7 +26,6 @@ const ForgotPassword = () => {
       );
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -52,25 +51,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Set the background color to white
+    backgroundColor: "#F2E2C9", // Beige background color
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#000", // Black text color
   },
   input: {
     width: "80%",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#000",
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginBottom: 20,
     fontSize: 16,
+    color: "#000", // Black text color
   },
   successMessage: {
-    color: "green",
+    color: "#000", // Black text color
     marginBottom: 10,
   },
   errorMessage: {
