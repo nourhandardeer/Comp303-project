@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
-import mainImage from '../assets/images/main.jpg'
+
 
 export default function App() {
   return (
