@@ -1,23 +1,24 @@
 // App.js
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground  } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
+import mainImage from '../assets/images/main.jpg'
 
 export default function App() {
   return (
     <View style={styles.container}>
-        <ImageBackground source={{uri: 'https://i.pinimg.com/564x/c4/5e/be/c45ebe25e9dcaffb25321ef98960c5e2.jpg'}} style={styles.background} >
+        <ImageBackground source={require('../assets/images/main.jpg')} style={styles.background} >
 
       <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
         
         <View style={styles.headerButtons}>
-        <TouchableOpacity style={styles.button} onPress={() => router.replace("/account/login")}>
+        <Pressable style={styles.button} onPress={() => router.replace("/account/login")}>
             <Text style={styles.buttonText}>SignIn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => router.replace("/account/register")} >
+          </Pressable>
+          <Pressable style={styles.button} onPress={() => router.replace("/account/register")} >
             <Text style={styles.buttonText}>SignUp</Text>
-          </TouchableOpacity>
+          </Pressable>
 
         </View>
       </View>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#D67808',
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: 'bold',
   },
   headerButtons: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     marginBottom: 10,
     color:'#FEFEFE',
-    fontFamily:'freight display pro',
+    fontFamily:'Futura-CondensedMedium',
     justifyContent: 'center',
     alignItems: 'center',
   },
