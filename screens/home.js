@@ -53,8 +53,9 @@ const styles = StyleSheet.create({
     
   },
   headerText: {
-    color: '#fff',
-    fontSize: 20,
+    color: '#AD764A',
+    fontSize: 40,
+    fontWeight: 'bold',
   },
   headerButtons: {
     flexDirection: 'row', 
