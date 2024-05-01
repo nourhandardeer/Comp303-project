@@ -1,4 +1,4 @@
-import { auth } from "./Config";
+import { auth } from "./config";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
