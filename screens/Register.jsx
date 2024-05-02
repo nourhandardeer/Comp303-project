@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { register } from "../firebase/auth";
-import { db, auth } from '../firebase/Config';
+import { db, auth } from '../firebase/config';
 import { doc, setDoc } from "firebase/firestore"; 
 import{ router } from "expo-router"
 
