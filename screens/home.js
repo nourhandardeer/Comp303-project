@@ -2,6 +2,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
+import * as Font from 'expo-font';
+
 
 export default function App() {
   return (
