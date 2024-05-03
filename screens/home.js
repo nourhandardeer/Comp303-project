@@ -1,11 +1,12 @@
-// App.js
-import React from 'react';
+import React , { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
 import { router } from 'expo-router';
 import * as Font from 'expo-font';
+import Category from '../components/category';
 
 
 export default function App() {
+  
   return (
     <View style={styles.container}>
         <ImageBackground source={{uri: 'https://i.pinimg.com/564x/c4/5e/be/c45ebe25e9dcaffb25321ef98960c5e2.jpg'}} style={styles.background} >
@@ -24,11 +25,13 @@ export default function App() {
         </View>
       </View>
       
+      
       <View style={styles.top}>
         <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
         <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
-
+        
       </View>
+      <Category></Category>
       
       <View style={styles.footer}>
         <Text style={styles.footerText}>&copy; 2024 Your App. All rights reserved.</Text>
@@ -72,12 +75,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   qouteText: {
-    fontSize: 40,
+    fontSize: 30,
     marginBottom: 10,
     color:'#FEFEFE',
     fontFamily:'Futura-CondensedMedium',
     justifyContent: 'center',
     alignItems: 'center',
+    fontWeight:'bold',
+    fontStyle:'italic',
   },
   button: {
     backgroundColor: '#385D6A',
