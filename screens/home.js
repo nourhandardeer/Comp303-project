@@ -4,12 +4,13 @@ import { router } from 'expo-router';
 import * as Font from 'expo-font';
 import Category from '../components/category';
 
+const mainBackground = require('../assets/images/main.jpg');
 
 export default function App() {
   
   return (
     <View style={styles.container}>
-        <ImageBackground source={{uri: 'https://i.pinimg.com/564x/c4/5e/be/c45ebe25e9dcaffb25321ef98960c5e2.jpg'}} style={styles.background} >
+        <ImageBackground source={mainBackground} style={styles.background} >
 
       <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
@@ -53,15 +54,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
   },
   header: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(300, 120, 0, 0.3)',
     padding: 20,
     alignItems: 'center',
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     
+    
   },
   headerText: {
-    color: '#D67808',
+    color: '#4B3407',
     fontSize: 35,
     fontWeight: 'bold',
   },
@@ -72,12 +74,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   qouteText: {
     fontSize: 30,
     marginBottom: 10,
-    color:'#FEFEFE',
+    color:'black',
     fontFamily:'Futura-CondensedMedium',
     justifyContent: 'center',
     alignItems: 'center',
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     fontStyle:'italic',
   },
   button: {
-    backgroundColor: '#385D6A',
+    backgroundColor: '#D8A123',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

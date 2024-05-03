@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
     title:{
         fontSize:25,
         fontWeight:'700',
-        color: "white",
+        color: "black",
     },
     categoryButton:{
         flexDirection:'row',
         alignItems: 'center',
-        backgroundColor:'white',
+        backgroundColor:'#D8A123',
         paddingHorizontal: 16 ,
         paddingVertical: 10,
         borderRadius: 10,
