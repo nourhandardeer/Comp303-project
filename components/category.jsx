@@ -25,8 +25,8 @@ const Category = () => {
   };
 
   return (
-    <View>
-      <Text style={styles.title}>Categories</Text>
+    <View >
+      <Text style={styles.title}>  Categories</Text>
       <View style={styles.container}>
         {data.map((item, index) => (
           <TouchableOpacity
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: '700',
     color: "white",
+    marginBottom:10,
   },
   categoryButton: {
     flexDirection: 'row',
