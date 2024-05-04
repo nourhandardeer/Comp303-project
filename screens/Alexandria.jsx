@@ -6,6 +6,7 @@ import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 import { AlexandriahotelsData } from '../data/AlexandriaHotelData';
+import Header from '../components/header'
 
 const Alexandria = () => {
     const [hotels, setHotels] = useState([]);
@@ -80,7 +81,8 @@ const Alexandria = () => {
     
       return (
         <View style={[styles.container, styles.darkBackground]}>
-          <FlatList
+          <Header/>
+      <FlatList style={styles.list}
             data={hotels}
             renderItem={renderHotelItem}
             keyExtractor={(item, index) => index.toString()}
@@ -150,6 +152,9 @@ const Alexandria = () => {
         fontWeight: 'bold',
         color: 'green',
       },
+      list:{
+        marginTop:30,
+      }
     });
     
 
