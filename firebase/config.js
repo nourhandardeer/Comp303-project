@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 
@@ -25,3 +26,4 @@ const auth = getAuth(app);
 
 
 export { app, db, auth };
+
