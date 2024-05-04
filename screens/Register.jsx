@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
+import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/config';
 import { doc, setDoc } from "firebase/firestore"; 
-import{ router } from "expo-router"
-import Header from '../components/header'
+import Header from '../components/header';
 
-const backgroundImage = require('../assets/images/sign.jpeg');
+const backgroundImage = require('../assets/images/bg.jpg');
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -17,13 +16,10 @@ const Register = () => {
   const [confirm, setConfirm] = useState("");
 
   const handlePress = async () => {
-   
-      if (password !== confirm) {
-        console.log("Passwords do not match.");
-        setError("Passwords do not match.");
-        return;
-      }
-     
+    if (password !== confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
     
     try {
       const credentials = await register(email, password);
@@ -43,25 +39,26 @@ const Register = () => {
         password: password,
         profileUrl: profileUrl
       });
-     router.replace("/login"); // Navigate to login screen after successful registration
+      // Navigate to login screen after successful registration
+      router.replace("/login");
     } catch (error) {
       console.error('Error adding user to Firestore:', error);
-      setError("Failed to register. Please try again."); // Set a generic error message
+      setError("Failed to register. Please try again.");
     }
   };
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
-       <Header/>
+        <Header />
         <View style={styles.overlay}>
           <Text style={styles.registerText}>Sign up</Text>
           <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          style={styles.input}
-        />
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+          />
           <TextInput
             placeholder="Email"
             value={email}
@@ -83,22 +80,16 @@ const Register = () => {
             style={styles.input}
           />
           <TextInput
-          placeholder="Profile Image URL"
-          value={profileUrl}
-          onChangeText={setProfileUrl}
-          style={styles.input}
-        />
+            placeholder="Profile Image URL"
+            value={profileUrl}
+            onChangeText={setProfileUrl}
+            style={styles.input}
+          />
           
-          <Pressable  onPress={handlePress}  style={styles.signupButton} >
-             <Text style={styles.signupText}>Register</Text>
-            </Pressable>
-          {/* <Pressable onPress={()=>router.replace("/account/login")}>
-            <Text style={styles.link}>Login</Text>
-          </Pressable> */}
-          {/* <Pressable onPress={()=>router.replace("/account/forgot")}>
-            <Text style={styles.link}>Forgot Password</Text>
-          </Pressable> */}
-          <Text style={styles.error}>{error.code}</Text>
+          <Pressable onPress={handlePress} style={styles.signupButton}>
+            <Text style={styles.signupText}>Register</Text>
+          </Pressable>
+          
           <Text style={styles.error}>{error}</Text>
         </View>
       </View>
@@ -118,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
-    backgroundColor: 'rgba(210, 180, 140, 0.4)',
+    backgroundColor: 'rgba(173, 216, 230, 0.8)', // Baby blue with opacity
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
@@ -150,12 +141,6 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
     fontSize: 16,
   },
-  link: {
-    color: "#007BFF",
-    fontSize: 16,
-    marginBottom: 10,
-    fontFamily: "Arial",
-  },
   error: {
     color: "black",
     fontSize: 16,
@@ -163,14 +148,16 @@ const styles = StyleSheet.create({
   },
 
   signupButton: {
-    backgroundColor: '#D2B48C', // Custom background color (beige)
+    backgroundColor: '#ADD8E6', // Baby blue color
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
+    marginTop: 10,
   },
   signupText: {
     fontWeight: 'bold', // Make the text bold
-    fontSize:16
+    fontSize:16,
+    color: 'black',
   },
 });
 
