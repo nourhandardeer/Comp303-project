@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 
 const Cairo = () => {
   // State to store hotels data fetched from Firestore
   const [hotels, setHotels] = useState([]);
   // State to track favorite hotels
   const [favorites, setFavorites] = useState([]);
+  const params = useLocalSearchParams();
+  
 
   useEffect(() => {
     const fetchHotelsFromFirestore = async () => {
@@ -44,21 +47,23 @@ const Cairo = () => {
 
   // Render hotel item component
   const renderHotelItem = ({ item }) => (
-    <View style={styles.hotelItem}>
-      <Image source={{ uri: item.photoURL }} style={styles.hotelImage} />
-      <TouchableOpacity onPress={() => addToFavorites(item.id)} style={styles.favoriteIcon}>
-        <FontAwesome name="heart" size={24} color={favorites.includes(item.id) ? 'red' : '#888'} />
-      </TouchableOpacity>
-      <View style={styles.hotelDetails}>
-        <Text style={styles.hotelName}>{item.name}</Text>
-        <View style={styles.destinationContainer}>
-          <FontAwesome name="map-marker" size={16} color="#888" />
-          <Text style={styles.destination}>{item.destination}</Text>
+    <TouchableOpacity onPress={() => router.push({ pathname: '/hotelDetails', params: { id: item.id } })}>
+      <View style={styles.hotelItem}>
+        <Image source={{ uri: item.photoURL }} style={styles.hotelImage} />
+        <TouchableOpacity onPress={() => addToFavorites(item.id)} style={styles.favoriteIcon}>
+          <FontAwesome name="heart" size={24} color={favorites.includes(item.id) ? 'red' : '#888'} />
+        </TouchableOpacity>
+        <View style={styles.hotelDetails}>
+          <Text style={styles.hotelName}>{item.name}</Text>
+          <View style={styles.destinationContainer}>
+            <FontAwesome name="map-marker" size={16} color="#888" />
+            <Text style={styles.destination}>{item.destination}</Text>
+          </View>
+          <Text style={styles.hotelDescription}>{item.description}</Text>
+          <Text style={styles.hotelPrice}>{item.price}</Text>
         </View>
-        <Text style={styles.hotelDescription}>{item.description}</Text>
-        <Text style={styles.hotelPrice}>{item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
