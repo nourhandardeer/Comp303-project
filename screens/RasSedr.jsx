@@ -5,7 +5,7 @@ import { collection, addDoc, getDocs, query, where , doc , setDoc } from 'fireba
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
-import {  Ras_SedrHotelsData } from '../data/Ras_SedrHotelsData';
+import {  RasSedrHotelsData } from '../data/RasSedrHotelsData';
 
 const RasSedr = () => {
     const [hotels, setHotels] = useState([]);
@@ -16,7 +16,7 @@ const RasSedr = () => {
         const addHotelsToFirestore = async () => {
           try {
             const hotelsCollectionRef = collection(db, 'hotels');
-            for (const hotel of Ras_SedrHotelsData) {
+            for (const hotel of RasSedrHotelsData) {
               const hotelDocRef = doc(hotelsCollectionRef, hotel.id.toString());
               await setDoc(hotelDocRef, hotel); // Set document ID as hotel ID
             }

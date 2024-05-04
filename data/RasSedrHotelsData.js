@@ -1,4 +1,4 @@
-export const Ras_SedrHotelsData = [
+export const RasSedrHotelsData = [
     {
       id: 1110,
       name: "Sea Pearl",
