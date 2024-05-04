@@ -5,6 +5,7 @@ import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { aswanHotelsData } from '../data/aswanHotelsData';
+import Header from '../components/header'
 
 const Aswan = () => {
   const [hotels, setHotels] = useState([]);
@@ -59,7 +60,8 @@ const Aswan = () => {
 
   return (
     <View style={[styles.container, styles.darkBackground]}>
-      <FlatList
+      <Header/>
+      <FlatList style={styles.list}
         data={hotels}
         renderItem={renderHotelItem}
         keyExtractor={(item, index) => index.toString()}
@@ -122,6 +124,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
   },
+  list:{
+    marginTop:30,
+  }
 });
 
 export default Aswan;
