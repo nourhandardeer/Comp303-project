@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
@@ -7,6 +7,8 @@ import { FontAwesome } from '@expo/vector-icons';
 const Cairo = () => {
   // State to store hotels data fetched from Firestore
   const [hotels, setHotels] = useState([]);
+  // State to track favorite hotels
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const fetchHotelsFromFirestore = async () => {
@@ -28,10 +30,25 @@ const Cairo = () => {
   // Filter hotels based on destination 'Cairo'
   const cairoHotels = hotels.filter(hotel => hotel.destination === 'Cairo');
 
+  // Function to handle adding a hotel to favorites
+  const addToFavorites = (hotelId) => {
+    // Check if the hotel is already in favorites
+    if (!favorites.includes(hotelId)) {
+      // Add the hotel to favorites
+      setFavorites([...favorites, hotelId]);
+    } else {
+      // Remove the hotel from favorites
+      setFavorites(favorites.filter(id => id !== hotelId));
+    }
+  };
+
   // Render hotel item component
   const renderHotelItem = ({ item }) => (
     <View style={styles.hotelItem}>
       <Image source={{ uri: item.photoURL }} style={styles.hotelImage} />
+      <TouchableOpacity onPress={() => addToFavorites(item.id)} style={styles.favoriteIcon}>
+        <FontAwesome name="heart" size={24} color={favorites.includes(item.id) ? 'red' : '#888'} />
+      </TouchableOpacity>
       <View style={styles.hotelDetails}>
         <Text style={styles.hotelName}>{item.name}</Text>
         <View style={styles.destinationContainer}>
@@ -74,11 +91,18 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 10,
     overflow: 'hidden',
+    position: 'relative',
   },
   hotelImage: {
     width: '100%',
     height: 200,
     resizeMode: 'cover',
+  },
+  favoriteIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
   },
   hotelDetails: {
     padding: 15,

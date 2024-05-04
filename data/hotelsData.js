@@ -71,4 +71,5 @@ export const hotelsData = [
     photoURL: "https://cf.bstatic.com/xdata/images/hotel/square600/263066820.webp?k=9836ec3c65bbfa27eaada41d6da1ee4277f33e37d871197118dbd0fa6966c18c&o=",
     price: "EGP 3,596.25"
   }
+  
 ];
