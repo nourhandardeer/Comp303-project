@@ -1,6 +1,6 @@
 export const AlexandriahotelsData = [
     {
-      id: 1,
+      id: 20,
       name: "Semiramis hotel",
       destination: "Alexandria",
       price:"EGP 863 ",
@@ -13,7 +13,7 @@ export const AlexandriahotelsData = [
     photoURL: "https://cf.bstatic.com/xdata/images/hotel/square240/543552378.webp?k=3b2fec5c90e82a76dde24d5c6c6f044e307415332c2bfd4117cd518ed94958c3&o="
   },
   {
-    id: 2,
+    id: 21,
     name: "Downtown Sea View Suites",
     destination: "Alexandria",
     price:"EGP 2,330 ",
@@ -26,7 +26,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/square240/239166149.webp?k=500269076b47ab1776fb3b484962c3d7502fa486a23f4a0e0d19ef97753de725&o="
 },
 {
-    id: 3,
+    id: 22,
     name: "Discover Inn",
     destination: "Alexandria",
     price:"EGP 2,637 ",
@@ -39,7 +39,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/square240/529370134.webp?k=b74e98521eff3c17a6b04719825847a48b1ba96a55d3b70b74b8dffc287d6278&o="
 },
 {
-    id: 4,
+    id: 23,
     name: "Sea View Haven In San Stefano",
     destination: "Alexandria",
     price:"EGP 2,071 ",
@@ -52,7 +52,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/square240/240134334.webp?k=76bacdf7d8ee620ceebc7ff055b816696223926b9476bbf22660caa539d3eff5&o="
 },
 {
-    id: 5,
+    id: 24,
     name: "Helnan Royal Hotel - Montazah Gardens",
     destination: "Alexandria",
     price:"EGP 6,234 ",
@@ -65,7 +65,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/363689492.jpg?k=2d7bed4ab44f43f924cb6187830b34adbf3fb41a1987fd0f5061e6b2a358fe4f&o=&hp=1"
 },
 {
-    id: 6,
+    id: 25,
     name: "Royal Jewel Al Raml Hotel",
     destination: "Alexandria",
     price:"EGP 4,220 ",
@@ -78,7 +78,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/274660552.jpg?k=d4088821d6bf7ae760592bc36343a29955e5b0e6722ed0afc503ed76624fdf1e&o=&hp=1"
 },
 {
-    id: 7,
+    id: 26,
     name: "Helnan Palace Hotel - Adults Only",
     destination: "Alexandria",
     price:"EGP 4,363 ",
@@ -91,7 +91,7 @@ export const AlexandriahotelsData = [
   photoURL: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/346526561.jpg?k=a50be491e6548c519c0417a1f2c3911d4ee6d8ba6fd61516454408398c48f5d2&o=&hp=1"
 },
 {
-    id: 8,
+    id: 27,
     name: "Plaza Hotel Alexandria",
     destination: "Alexandria",
     price:"EGP 3,596 ",
