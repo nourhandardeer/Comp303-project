@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     
   },
   headerText: {
-    color: '#4B3407',
+    color: '#F4C14C',
     fontSize: 35,
     fontWeight: 'bold',
   },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   qouteText: {
     fontSize: 30,
     marginBottom: 10,
-    color:'black',
+    color:'white',
     fontFamily:'Futura-CondensedMedium',
     justifyContent: 'center',
     alignItems: 'center',
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight:'bold',
   },
   footer: {
     backgroundColor: '#333',
