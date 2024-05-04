@@ -24,7 +24,8 @@ async function register(email, password) {
 }
 
 async function login(email, password) {
-  await signInWithEmailAndPassword(auth, email, password);
+  const cred  = await signInWithEmailAndPassword(auth, email, password);
+  return cred;
 }
 
 async function sendPasswordReset(email) {
