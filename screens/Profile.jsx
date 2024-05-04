@@ -14,6 +14,7 @@ return(
 
 
     <View>
+        <Header/>
         <Text>
             hello
         </Text>
