@@ -12,8 +12,19 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [profileUrl, setProfileUrl] = useState("");
+  const [confirm, setConfirm] = useState("");
 
   const handlePress = async () => {
+   
+      if (password !== confirm) {
+        console.log("Passwords do not match.");
+        setError("Passwords do not match.");
+        return;
+      }
+     
+    
     try {
       const credentials = await register(email, password);
       console.log('credentials', credentials);
@@ -27,12 +38,15 @@ const Register = () => {
   const addUser = async () => {
     try {
       await setDoc(doc(db, "users", auth.currentUser.uid), {
+        username: username,
         email: email,
-        password: password
+        password: password,
+        profileUrl: profileUrl
       });
+     router.replace("/login"); // Navigate to login screen after successful registration
     } catch (error) {
       console.error('Error adding user to Firestore:', error);
-      throw error;
+      setError("Failed to register. Please try again."); // Set a generic error message
     }
   };
 
@@ -42,6 +56,12 @@ const Register = () => {
        <Header/>
         <View style={styles.overlay}>
           <Text style={styles.registerText}>Sign up</Text>
+          <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+          style={styles.input}
+        />
           <TextInput
             placeholder="Email"
             value={email}
@@ -55,6 +75,19 @@ const Register = () => {
             secureTextEntry
             style={styles.input}
           />
+          <TextInput
+            placeholder="Confirm Password"
+            value={confirm}
+            onChangeText={setConfirm}
+            secureTextEntry
+            style={styles.input}
+          />
+          <TextInput
+          placeholder="Profile Image URL"
+          value={profileUrl}
+          onChangeText={setProfileUrl}
+          style={styles.input}
+        />
           
           <Pressable  onPress={handlePress}  style={styles.signupButton} >
              <Text style={styles.signupText}>Register</Text>
@@ -66,6 +99,7 @@ const Register = () => {
             <Text style={styles.link}>Forgot Password</Text>
           </Pressable> */}
           <Text style={styles.error}>{error.code}</Text>
+          <Text style={styles.error}>{error}</Text>
         </View>
       </View>
     </ImageBackground>
@@ -123,7 +157,7 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
   },
   error: {
-    color: "red",
+    color: "black",
     fontSize: 16,
     fontFamily: "Arial",
   },
