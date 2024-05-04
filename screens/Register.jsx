@@ -4,6 +4,7 @@ import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/config';
 import { doc, setDoc } from "firebase/firestore"; 
 import{ router } from "expo-router"
+import Header from '../components/header'
 
 const backgroundImage = require('../assets/images/sign.jpeg');
 
@@ -38,6 +39,7 @@ const Register = () => {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
+       <Header/>
         <View style={styles.overlay}>
           <Text style={styles.registerText}>Sign up</Text>
           <TextInput
@@ -53,6 +55,7 @@ const Register = () => {
             secureTextEntry
             style={styles.input}
           />
+          
           <Pressable  onPress={handlePress}  style={styles.signupButton} >
              <Text style={styles.signupText}>Register</Text>
             </Pressable>

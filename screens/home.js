@@ -1,8 +1,9 @@
 import React , { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable,ScrollView } from 'react-native';
 import { router } from 'expo-router';
-import * as Font from 'expo-font';
 import Category from '../components/category';
+import Trending from '../components/trending';
+
 
 const mainBackground = require('../assets/images/main.jpg');
 
@@ -25,6 +26,7 @@ export default function App() {
 
         </View>
       </View>
+      <ScrollView>
       
       
       <View style={styles.top}>
@@ -34,9 +36,12 @@ export default function App() {
       </View>
       <Category></Category>
       
+      <Trending/>
+      </ScrollView>
       <View style={styles.footer}>
         <Text style={styles.footerText}>&copy; 2024 Your App. All rights reserved.</Text>
       </View>
+      
       </ImageBackground>
     </View>
 
@@ -74,9 +79,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom:35,
+    marginTop:35,
   },
   qouteText: {
-    fontSize: 30,
+    fontSize: 40,
     marginBottom: 10,
     color:'white',
     fontFamily:'Futura-CondensedMedium',
@@ -105,4 +112,5 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#fff',
   },
+  
 });

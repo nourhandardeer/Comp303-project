@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { login } from "../firebase/auth";
+import Header from '../components/header'
 
 const backgroundImage = require('../assets/images/sign.jpeg');
 
@@ -24,6 +25,7 @@ const Login = () => {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
+      <Header/>
         <View style={styles.overlay}>
           <Text style={styles.loginText}>Login</Text>
           <TextInput

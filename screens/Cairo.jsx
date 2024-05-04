@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
+import Header from '../components/header'
 
 const Cairo = () => {
   // State to store hotels data fetched from Firestore
@@ -68,7 +69,8 @@ const Cairo = () => {
 
   return (
     <View style={[styles.container, styles.darkBackground]}>
-      <FlatList
+      <Header/>
+      <FlatList style={styles.list}
         data={cairoHotels}
         renderItem={renderHotelItem}
         keyExtractor={(item, index) => index.toString()}
@@ -138,6 +140,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
   },
+  list:{
+    marginTop:30,
+  }
 });
 
 export default Cairo;
