@@ -1,10 +1,11 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
+import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { login } from "../firebase/auth";
 import Header from '../components/header'
+import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
 
-const backgroundImage = require('../assets/images/sign.jpeg');
+const backgroundImage = require('../assets/images/bg.jpg');
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,42 +16,46 @@ const Login = () => {
     try {
       const credentials = await login(email, password);
       console.log('credentials', credentials);
-     // router.navigate("/home");
+      // Navigate to home screen after successful login
+      router.navigate("/home");
     } catch (error) {
       console.log('error', JSON.stringify(error));
-      setError(error);
+      setError(error.message); // Set error message instead of error object
     }
   };
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
-      <Header/>
+        <Header />
         <View style={styles.overlay}>
           <Text style={styles.loginText}>Login</Text>
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <AntDesign name="mail" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="lock" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
+          </View>
           <Pressable onPress={handleLogin} style={styles.loginButton}>
             <Text style={styles.loginButtonText}>Login</Text>
           </Pressable>
-          {/* <Pressable onPress={() => router.replace("/account/register")}>
-            <Text style={styles.link}>Register</Text>
-          </Pressable> */}
           <Pressable onPress={()=>router.replace("/forgot")}>
             <Text style={styles.link}>Forgot Password</Text>
           </Pressable>
-          <Text style={styles.error}>{error.code}</Text>
+          <Text style={styles.error}>{error}</Text>
         </View>
       </View>
     </ImageBackground>
@@ -69,11 +74,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
-    backgroundColor: 'rgba(210, 180, 140, 0.4)',
+    backgroundColor: 'rgba(173, 216, 230, 0.8)', // Baby blue with opacity
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
-    width: 300,
+    width: 350, // Increased width
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -90,23 +95,29 @@ const styles = StyleSheet.create({
     fontFamily: "Futura-CondensedMedium", // Use SF Pro Display font
     fontWeight: 'bold',
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
   input: {
-    width: "100%",
+    flex: 1,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    marginBottom: 20,
     fontFamily: "Arial",
     fontSize: 16,
   },
   link: {
-    color: "black",
+    color: "#007BFF",
     fontSize: 16,
     marginBottom: 10,
     fontFamily: "Arial",
-    
   },
   error: {
     color: "red",
@@ -114,14 +125,16 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
   },
   loginButton: {
-    backgroundColor: '#D2B48C', // Custom background color (beige)
+    backgroundColor: '#ADD8E6', // Baby blue color
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
+    marginTop: 10,
   },
   loginButtonText: {
     fontWeight: 'bold', // Make the text bold
     fontSize: 16,
+    color: 'black',
   },
 });
 

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
+import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground, ScrollView } from "react-native";
 import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/config';
 import { doc, setDoc } from "firebase/firestore"; 
+import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
 import Header from '../components/header';
+import { router } from 'expo-router';
 
 const backgroundImage = require('../assets/images/bg.jpg');
 
@@ -14,6 +16,9 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handlePress = async () => {
     if (password !== confirm) {
@@ -27,7 +32,7 @@ const Register = () => {
       addUser();
     } catch (error) {
       console.log('error', JSON.stringify(error));
-      setError(error);
+      setError(error.message); // Set error message instead of error object
     }
   };
 
@@ -37,7 +42,10 @@ const Register = () => {
         username: username,
         email: email,
         password: password,
-        profileUrl: profileUrl
+        profileUrl: profileUrl,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone
       });
       // Navigate to login screen after successful registration
       router.replace("/login");
@@ -49,42 +57,85 @@ const Register = () => {
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <Header />
         <View style={styles.overlay}>
           <Text style={styles.registerText}>Sign up</Text>
-          <TextInput
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Confirm Password"
-            value={confirm}
-            onChangeText={setConfirm}
-            secureTextEntry
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Profile Image URL"
-            value={profileUrl}
-            onChangeText={setProfileUrl}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <AntDesign name="user" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="First Name"
+              value={firstName}
+              onChangeText={setFirstName}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="user" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Last Name"
+              value={lastName}
+              onChangeText={setLastName}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="user" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="mail" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="lock" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="lock" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Confirm Password"
+              value={confirm}
+              onChangeText={setConfirm}
+              secureTextEntry
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <AntDesign name="phone" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Phone Number"
+              value={phone}
+              onChangeText={setPhone}
+              style={styles.input}
+            />
+          </View>
+         
+          <View style={styles.inputContainer}>
+            <AntDesign name="link" size={24} color="black" style={styles.icon} />
+            <TextInput
+              placeholder="Profile Image URL"
+              value={profileUrl}
+              onChangeText={setProfileUrl}
+              style={styles.input}
+            />
+          </View>
           
           <Pressable onPress={handlePress} style={styles.signupButton}>
             <Text style={styles.signupText}>Register</Text>
@@ -92,7 +143,7 @@ const Register = () => {
           
           <Text style={styles.error}>{error}</Text>
         </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -104,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -113,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
-    width: 300,
+    width: 350, // Increased width
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -130,14 +181,21 @@ const styles = StyleSheet.create({
     fontFamily: "Futura-CondensedMedium", // Use Helvetica Neue font
     fontWeight: 'bold',
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
+  },
   input: {
-    width: "100%",
+    flex: 1,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    marginBottom: 20,
     fontFamily: "Arial",
     fontSize: 16,
   },
