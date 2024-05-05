@@ -4,7 +4,7 @@ import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "r
 import { login } from "../firebase/auth";
 import Header from '../components/header'
 import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
-
+import { auth } from '../firebase/config';
 const backgroundImage = require('../assets/images/bg.jpg');
 
 const Login = () => {
@@ -16,8 +16,17 @@ const Login = () => {
     try {
       const credentials = await login(email, password);
       console.log('credentials', credentials);
-      // Navigate to home screen after successful login
-      router.navigate("/home");
+  
+      // Get the current user ID
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userId = currentUser.uid;
+        // Navigate to user profile screen after successful login
+        router.push({ pathname: '/user', params: { userId: userId } });
+      } else {
+        // Handle error if user is not logged in
+        setError("User is not logged in.");
+      }
     } catch (error) {
       console.log('error', JSON.stringify(error));
       setError(error.message); // Set error message instead of error object
