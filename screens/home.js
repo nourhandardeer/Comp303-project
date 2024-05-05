@@ -34,6 +34,9 @@ export default function App() {
         {/* <Pressable style={styles.button} onPress={() => router.replace("/Profile")} >
             <Text style={styles.buttonText}>Profile</Text>
           </Pressable> */}
+          <Pressable style={styles.button} onPress={() => router.replace("/Calendar")} >
+            <Text style={styles.buttonText}>calendar</Text>
+          </Pressable>
         <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
         <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
         
