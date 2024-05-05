@@ -6,6 +6,7 @@ import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 import { DahabHotelData } from '../data/DahabHotelData';
+import Header from '../components/header';
 
 const Dahab = () => {
     const [hotels, setHotels] = useState([]);
@@ -81,7 +82,8 @@ const Dahab = () => {
     
       return (
         <View style={[styles.container, styles.darkBackground]}>
-          <FlatList
+          <Header/>
+          <FlatList style={{marginTop:30,}}
             data={hotels}
             renderItem={renderHotelItem}
             keyExtractor={(item, index) => index.toString()}

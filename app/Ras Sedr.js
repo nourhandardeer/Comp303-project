@@ -1,4 +1,4 @@
-import RasSedr from "../screens/RasSedr";
+import RasSedr from "../screens/Ras Sedr";
 export default function Page() {
     return (
      <RasSedr/>

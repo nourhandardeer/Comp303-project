@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import Header from '../components/header';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -65,6 +66,8 @@ const HotelDetails = () => {
   }
 
   return (
+    <View>
+    <Header/>
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       {hotelDetails && hotelDetails.details && (
         <>
@@ -89,6 +92,7 @@ const HotelDetails = () => {
         </>
       )}
     </ScrollView>
+    </View>
   );
 };
 

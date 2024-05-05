@@ -1,4 +1,4 @@
-import NorthCoast from "../screens/NorthCoast";
+import NorthCoast from "../screens/North Coast";
 export default function Page() {
     return (
      <NorthCoast/>

@@ -26,7 +26,7 @@ const destinationBeach = [
         image:taba 
     },
     {
-        title:"North coast",
+        title:"North Coast",
         image:northCoast 
     },
 ];

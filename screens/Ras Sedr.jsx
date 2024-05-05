@@ -5,37 +5,38 @@ import { collection, addDoc, getDocs, query, where , doc , setDoc } from 'fireba
 import { db } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
-import { NorthCoastHotelsData  } from '../data/NorthCoastHotelsData';
+import {  RasSedrHotelsData } from '../data/RasSedrHotelsData';
+import Header from '../components/header';
 
-const NorthCoast = () => {
+const RasSedr = () => {
     const [hotels, setHotels] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const params = useLocalSearchParams();
 
-    // useEffect(() => {
-    //     const addHotelsToFirestore = async () => {
-    //       try {
-    //         const hotelsCollectionRef = collection(db, 'hotels');
-    //         for (const hotel of NorthCoastHotelsData ) {
-    //           const hotelDocRef = doc(hotelsCollectionRef, hotel.id.toString());
-    //           await setDoc(hotelDocRef, hotel); // Set document ID as hotel ID
-    //         }
-    //         console.log('Hotels added to Firestore successfully!');
-    //       } catch (error) {
-    //         console.error('Error adding hotels to Firestore:', error);
-    //       }
-    //     };
+    useEffect(() => {
+        const addHotelsToFirestore = async () => {
+          try {
+            const hotelsCollectionRef = collection(db, 'hotels');
+            for (const hotel of RasSedrHotelsData) {
+              const hotelDocRef = doc(hotelsCollectionRef, hotel.id.toString());
+              await setDoc(hotelDocRef, hotel); // Set document ID as hotel ID
+            }
+            console.log('Hotels added to Firestore successfully!');
+          } catch (error) {
+            console.error('Error adding hotels to Firestore:', error);
+          }
+        };
     
-    //     addHotelsToFirestore(); // Invoke the function when the component mounts
+        addHotelsToFirestore(); // Invoke the function when the component mounts
     
-    //     // No dependencies are listed, so this will only run once when the component mounts
-    // }, []);
+        // No dependencies are listed, so this will only run once when the component mounts
+    }, []);
 
     useEffect(() => {
         const fetchHotelsFromFirestore = async () => {
           try {
             const hotelsCollectionRef = collection(db, 'hotels');
-            const q = query(hotelsCollectionRef, where('destination', '==', 'NorthCoast'));
+            const q = query(hotelsCollectionRef, where('destination', '==', 'RasSedr'));
             const querySnapshot = await getDocs(q);
             const hotelsData = querySnapshot.docs.map(doc => doc.data());
             setHotels(hotelsData);
@@ -81,7 +82,8 @@ const NorthCoast = () => {
     
       return (
         <View style={[styles.container, styles.darkBackground]}>
-          <FlatList
+          <Header/>
+          <FlatList style={{marginTop:30}}
             data={hotels}
             renderItem={renderHotelItem}
             keyExtractor={(item, index) => index.toString()}
@@ -154,4 +156,4 @@ const NorthCoast = () => {
     });
     
 
-export default NorthCoast ;
+export default RasSedr ;
