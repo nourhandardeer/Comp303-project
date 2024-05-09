@@ -42,6 +42,19 @@ export default function User() {
 
     fetchUserProfile();
   }, []);
+
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        console.log("User signed out successfully");
+        router.replace("Home")
+        // Perform any additional actions after logout if needed
+      })
+      .catch(error => {
+        console.error("Error signing out:", error);
+      });
+  };
+
   
   return (
     <View style={styles.container}>
@@ -50,7 +63,7 @@ export default function User() {
           <Text style={styles.headerText}>EgyptToGo</Text>
           <View style={styles.headerButtons}>
          
-          <Pressable style={styles.button} onPress={() => router.replace("/logout")}>
+          <Pressable style={styles.button} onPress={handleLogout}>
               <AntDesign name="logout" size={24} color="white" />
           </Pressable>
           <Pressable onPress={() => router.replace("/Profile")} style={styles.profileImageContainer}>
