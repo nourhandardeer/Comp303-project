@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, ImageBackground, Image ,ScrollView} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format, differenceInDays } from 'date-fns';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { auth } from '../firebase/config';
+
 
 const CalendarInput = () => {
   const mainBackground = require('../assets/images/main.jpg');
@@ -27,6 +28,7 @@ const CalendarInput = () => {
     cardHolderName: '',
     expiryDate: '',
   });
+  const [paymentMessage, setPaymentMessage] = useState('');
 
   useEffect(() => {
     const handleGetUser = async () => {
@@ -151,7 +153,8 @@ const CalendarInput = () => {
           paymentDetails: paymentDetails,
         };
       } else {
-        // If payment method is cash, no additional details needed
+        // Inform the user that the hotel has been informed of the reservation
+        setPaymentMessage('We have informed the hotel of your reservation. Thank you!');
       }
 
       await setDoc(doc(db, "Reservations", auth.currentUser.uid + id), reservationData);
@@ -172,6 +175,7 @@ const CalendarInput = () => {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       {/* <ImageBackground source={mainBackground} style={styles.background} > */}
       <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
@@ -221,7 +225,11 @@ const CalendarInput = () => {
         <Text style={styles.titles}>Total Price: {totalPrice}</Text>
         <Text>Choose Payment Method:</Text>
         <View style={styles.paymentOptions}>
-         9
+        <TouchableOpacity
+  style={[styles.paymentButton, paymentMethod === 'cash' && styles.selectedPayment]}
+  onPress={() => handlePaymentMethodChange('cash')}>
+  <Text>Cash</Text>
+</TouchableOpacity>
           <TouchableOpacity
             style={[styles.paymentButton, paymentMethod === 'visa' && styles.selectedPayment]}
             onPress={() => handlePaymentMethodChange('visa')}>
@@ -230,12 +238,35 @@ const CalendarInput = () => {
         </View>
         {paymentMethod === 'visa' && (
           <View style={styles.paymentDetails}>
+             <TextInput
+    style={styles.paymentInput}
+    placeholder="Name"
+    value={paymentDetails.cardHolderName}
+    onChangeText={(text) => handlePaymentDetailsChange('cardHolderName', text)}
+  />
+   <TextInput
+    style={styles.paymentInput}
+    placeholder="Card Number"
+    keyboardType="numeric"
+    value={paymentDetails.visaNumber}
+    onChangeText={(text) => handlePaymentDetailsChange('visaNumber', text)}
+  />
+  <TextInput
+    style={styles.paymentInput}
+    placeholder="Expiry Date (MM/YY)"
+    maxLength={5} // Maximum length for MM/YY format
+    value={paymentDetails.expiryDate}
+    onChangeText={(text) => handlePaymentDetailsChange('expiryDate', text)}
+  />
             <TextInput
-              style={styles.paymentInput}
-              placeholder="CVV"
-              value={paymentDetails.cvv}
-              onChangeText={(text) => handlePaymentDetailsChange('cvv', text)}
-            />
+    style={styles.paymentInput}
+    placeholder="CVV"
+    keyboardType="numeric"
+    maxLength={3} // Maximum length for CVV
+    value={paymentDetails.cvv}
+    onChangeText={(text) => handlePaymentDetailsChange('cvv', text)}
+  />
+  <Text style={styles.paymentInput}>Amount: {totalPrice}</Text>
           </View>
         )}
         <TouchableOpacity style={styles.bookButton} onPress={bookNow}>
@@ -243,6 +274,7 @@ const CalendarInput = () => {
         </TouchableOpacity>
       </View>
       {/* </ImageBackground> */}
+      </ScrollView>
     </View>
   );
 };

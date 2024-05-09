@@ -13,24 +13,24 @@ const RasSedr = () => {
     const [favorites, setFavorites] = useState([]);
     const params = useLocalSearchParams();
 
-    useEffect(() => {
-        const addHotelsToFirestore = async () => {
-          try {
-            const hotelsCollectionRef = collection(db, 'hotels');
-            for (const hotel of RasSedrHotelsData) {
-              const hotelDocRef = doc(hotelsCollectionRef, hotel.id.toString());
-              await setDoc(hotelDocRef, hotel); // Set document ID as hotel ID
-            }
-            console.log('Hotels added to Firestore successfully!');
-          } catch (error) {
-            console.error('Error adding hotels to Firestore:', error);
-          }
-        };
+    // useEffect(() => {
+    //     const addHotelsToFirestore = async () => {
+    //       try {
+    //         const hotelsCollectionRef = collection(db, 'hotels');
+    //         for (const hotel of RasSedrHotelsData) {
+    //           const hotelDocRef = doc(hotelsCollectionRef, hotel.id.toString());
+    //           await setDoc(hotelDocRef, hotel); // Set document ID as hotel ID
+    //         }
+    //         console.log('Hotels added to Firestore successfully!');
+    //       } catch (error) {
+    //         console.error('Error adding hotels to Firestore:', error);
+    //       }
+    //     };
     
-        addHotelsToFirestore(); // Invoke the function when the component mounts
+    //     addHotelsToFirestore(); // Invoke the function when the component mounts
     
-        // No dependencies are listed, so this will only run once when the component mounts
-    }, []);
+    //     // No dependencies are listed, so this will only run once when the component mounts
+    // }, []);
 
     useEffect(() => {
         const fetchHotelsFromFirestore = async () => {
