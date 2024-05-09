@@ -29,10 +29,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#D8A123',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderRadius: 5,
     marginLeft: 10, 
+    
   },
 });
 

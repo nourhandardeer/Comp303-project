@@ -28,9 +28,9 @@ export default function App() {
 
         </View>
       </View>
-      <SearchBar/>
-      <ScrollView>
       
+      <ScrollView>
+      <SearchBar/>
       
       <View style={styles.top}>
         {/* <Pressable style={styles.button} onPress={() => router.replace("/Profile")} >

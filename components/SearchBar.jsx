@@ -34,10 +34,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'white',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginRight: 10,
+    paddingVertical: 10,
   },
   searchButton: {
     padding: 10,
