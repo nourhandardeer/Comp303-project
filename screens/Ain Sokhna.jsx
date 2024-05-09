@@ -76,9 +76,7 @@ useEffect(() => {
           </View>
           <Text style={styles.hotelDescription}>{item.description}</Text>
           <Text style={styles.hotelPrice}>{item.price}</Text>
-          <TouchableOpacity style={styles.bookstyle} onPress={() => router.push({ pathname: '/Calendar', params: { id: item.id , price:item.price,hotelname :item.name,place:item.destination } })}>
-            <Text style={styles.bookTitle}>Book Now</Text>
-          </TouchableOpacity>
+          
         </View>
       </View>
     </TouchableOpacity>
