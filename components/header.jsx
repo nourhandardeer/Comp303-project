@@ -10,8 +10,8 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleBack}>
-        <Ionicons name="arrow-back" size={24} color="white" /> 
+      <TouchableOpacity style={styles.button} onPress={handleBack}>
+        <Ionicons name="arrow-back" size={24} color="black" /> 
       </TouchableOpacity>
     </View>
   );
@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
     marginBottom: 20, 
     backgroundColor: '#D8A123',
     zIndex: 1,
+  },
+  button: {
+    backgroundColor: '#D8A123',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginLeft: 10, 
   },
 });
 

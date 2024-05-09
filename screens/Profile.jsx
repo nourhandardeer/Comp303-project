@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, FlatList, ImageBackground,Image,TouchableOpacit
 import { collection, addDoc, getDocs, query, where,doc,setDoc,getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import {app} from '../firebase/config'
-import {  getAuth } from "firebase/auth"
+import {  getAuth } from "firebase/auth";
+import Header from "../components/header";
 
 
 const mainBackground = require('../assets/images/main.jpg');
@@ -51,12 +52,11 @@ return(
 
     <View style={styles.container}>
         <ImageBackground source={mainBackground} style={styles.background} >
-        <View style={styles.header}>
-        <Text style={styles.headerText}>EgyptToGo</Text>
-        </View>
+          <Header/>
+        
 
 
-        <View style={{marginVertical:20}}>
+        <View style={styles.profileView}>
         <View style={styles.photo}>
    <     Image  source={ {uri:photo}} style={styles.profileimage}/>
 
@@ -131,21 +131,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover', 
        
       },
-      header: {
-        backgroundColor: 'rgba(300, 120, 0, 0.3)',
-        padding: 20,
-        alignItems: 'center',
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-     
-        
-        
-      },
-      headerText: {
-        color: '#F4C14C',
-        fontSize: 35,
-        fontWeight: 'bold',
-      },
+      
 
      nameprofile: {
         color: '#F4C14C',
@@ -165,6 +151,10 @@ const styles = StyleSheet.create({
        marginLeft:25,
       
       
+      },
+      profileView:{
+        marginVertical:20,
+        marginTop:70,
       },
       icons:{
         borderRadius:999,
