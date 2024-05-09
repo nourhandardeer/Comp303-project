@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, Pressable, ScrollView,Image } 
 import { useLocation, useLocalSearchParams } from 'expo-router'; // Import useLocalSearchParams
 import Category from '../components/category';
 import Trending from '../components/trending';
+import SearchBar from '../components/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
 import { auth , db } from '../firebase/config';
 import { router } from 'expo-router';
@@ -72,6 +73,7 @@ export default function User() {
           </View>
         </View>
         <ScrollView>
+        <SearchBar/>
           <View style={styles.top}>
             <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
             <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
