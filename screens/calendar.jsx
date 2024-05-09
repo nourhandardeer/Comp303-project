@@ -1,123 +1,165 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity,ImageBackground,Image } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, ImageBackground, Image } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { format } from 'date-fns';
-import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
-import Header from '../components/header';
-import { collection, addDoc, getDocs, query, where,doc,setDoc,getDoc } from 'firebase/firestore';
+import { format, differenceInDays } from 'date-fns';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { app, auth } from '../firebase/config'
-import { getAuth } from "firebase/auth"
-
+import { auth } from '../firebase/config';
 
 const CalendarInput = () => {
   const mainBackground = require('../assets/images/main.jpg');
   const { id, price, hotelname, place } = useLocalSearchParams();
-  const [hotelDetails, setHotelDetails] = useState(null);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [hotelDate, sethotelDate] = useState(null);
+  const [isCheckinDatePickerVisible, setCheckinDatePickerVisibility] = useState(false);
+  const [isCheckoutDatePickerVisible, setCheckoutDatePickerVisibility] = useState(false);
+  const [checkinDate, setCheckinDate] = useState(null);
+  const [checkoutDate, setCheckoutDate] = useState(null);
+  const [totalNights, setTotalNights] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [user,setUser]=useState(null)
-
   const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchHotelDetails = async () => {
-  //     try {
-  //       const hotelDocRef = doc(db, 'hotels', id);
-  //       const docSnap = await getDoc(hotelDocRef);
-
-  //       if (docSnap.exists()) {
-  //         setHotelDetails(docSnap.data());
-
-  //       } else {
-  //         setError('Hotel details not found.');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching hotel details:', error);
-  //       setError('Failed to fetch hotel details. Please try again later.');
-  //     } 
-  //   };
-
-  //   if (id) {
-  //     fetchHotelDetails();
-  //   }
-  // }, [id]);
-
+  const [user, setUser] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState({
+    cvv: '',
+    visaNumber: '',
+    cardHolderName: '',
+    expiryDate: '',
+  });
 
   useEffect(() => {
-    handelGetUser();
+    const handleGetUser = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setUser(data);
+            setName(data.username);
+            setEmail(data.email);
+          } else {
+            console.log("No such document!");
+            // Handle case where user data does not exist
+          }
+        } else {
+          console.log("No user is currently logged in!");
+          // Handle case where no user is logged in
+          // For example, redirect the user to the login screen
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setError('Failed to fetch user. Please try again later.');
+        // Handle error
+      }
+    };
+
+
+    handleGetUser();
   }, []);
 
-  const handelGetUser = async () => {
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      //console.log("Document data:", docSnap.data());
-      const data = docSnap.data();
-      setUser(docSnap.data());
-      setName(data.username);
-      setEmail(data.email);
-
-
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
-      router.replace("/login");
-      
-    }
-
+  const showCheckinDatePicker = () => {
+    setCheckinDatePickerVisibility(true);
   };
 
-  const addNewReservation = async (reservationId) => {
+  const hideCheckinDatePicker = () => {
+    setCheckinDatePickerVisibility(false);
+  };
+
+  const handleCheckinConfirm = (date) => {
+    hideCheckinDatePicker();
+    setCheckinDate(date);
+  };
+
+  const showCheckoutDatePicker = () => {
+    setCheckoutDatePickerVisibility(true);
+  };
+
+  const hideCheckoutDatePicker = () => {
+    setCheckoutDatePickerVisibility(false);
+  };
+
+  const handleCheckoutConfirm = (date) => {
+    hideCheckoutDatePicker();
+    setCheckoutDate(date);
+    calculateNightsAndPrice(date);
+  };
+
+  const calculateNightsAndPrice = (checkoutDate) => {
+    if (checkinDate && checkoutDate) {
+      const nights = differenceInDays(checkoutDate, checkinDate);
+
+
+      const totalPrice = price * nights;
+      setTotalNights(nights);
+      setTotalPrice(totalPrice);
+      console.log(totalPrice)
+      console.log(price);
+      console.log(nights);
+
+    }
+  };
+
+  const handlePaymentMethodChange = (method) => {
+    setPaymentMethod(method);
+  };
+
+  const handlePaymentDetailsChange = (key, value) => {
+    setPaymentDetails((prevDetails) => ({
+      ...prevDetails,
+      [key]: value,
+    }));
+  };
+
+  const bookNow = async () => {
     try {
-        // Ensure required fields are not empty
-        if (!auth.currentUser || !name || !email || !hotelname || !price || !selectedDate) {
-            throw new Error("Missing required fields.");
-        }
+      // Ensure required fields are not empty
+      if (
+        !auth.currentUser ||
+        !name ||
+        !email ||
+        !hotelname ||
+        !price ||
+        !checkinDate ||
+        !checkoutDate ||
+        !paymentMethod
+      ) {
+        throw new Error("Missing required fields.");
+      }
 
-        await setDoc(doc(db, "Reservations",reservationId), {
-            userId: auth.currentUser.uid,
-            hotelId:id,
-            username: name,
-            email: email,
-            hotelName: hotelname,
-            hotelPrice: price,
-            hotelDate: selectedDate,
-            placehotel:place
-        });
-        // Navigate to login screen after successful registration
+      let reservationData = {
+        userId: auth.currentUser.uid,
+        hotelId: id,
+        username: name,
+        email: email,
+        hotelName: hotelname,
+        hotelPrice: price,
+        checkinDate: format(checkinDate, 'dd/MM/yyyy'),
+        checkoutDate: format(checkoutDate, 'dd/MM/yyyy'),
+        totalNights: totalNights,
+        totalPrice: totalPrice,
+        placehotel: place,
+        paymentMethod: paymentMethod,
+      };
 
+      // Add payment details based on the selected payment method
+      if (paymentMethod === 'visa') {
+        reservationData = {
+          ...reservationData,
+          paymentDetails: paymentDetails,
+        };
+      } else {
+        // If payment method is cash, no additional details needed
+      }
+
+      await setDoc(doc(db, "Reservations", auth.currentUser.uid + id), reservationData);
+      // Navigate or perform any action after successful booking
     } catch (error) {
-        console.error('Error adding:', error);
-
-        // Handle specific errors
-        if (error.code === "permission-denied") {
-            setError("Permission denied. Please contact support.");
-        } else {
-            setError("Failed to add. Please try again.");
-        }
+      console.error('Error booking:', error);
+      // Handle error
     }
-};
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    hideDatePicker();
-    setSelectedDate(date);
-    
-console.log(user)
-
-
   };
 
   if (error) {
@@ -127,77 +169,107 @@ console.log(user)
       </View>
     );
   }
- 
-
 
   return (
     <View style={styles.container}>
-       <ImageBackground source={mainBackground} style={styles.background} >
-       <View style={styles.header}>
+      {/* <ImageBackground source={mainBackground} style={styles.background} > */}
+      <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
+      </View>
+      <View style={styles.containerBook}>
+        <Text style={styles.titles}> User Name : {name}</Text>
+        <Text style={styles.titles}>Email: {email}</Text>
+        <Text style={styles.titles}>Hotel Name : {hotelname}</Text>
+        <Text style={styles.titles}>Price Per night: {price}</Text>
+        <View style={styles.dateContainer}>
+          <View style={styles.datePicker}>
+            <DateTimePickerModal
+              isVisible={isCheckinDatePickerVisible}
+              mode="date"
+              onConfirm={handleCheckinConfirm}
+              onCancel={hideCheckinDatePicker}
+            />
+            <TextInput
+              style={styles.dateInput}
+              placeholder="Check-in Date"
+              value={checkinDate ? format(checkinDate, 'dd/MM/yyyy') : ''}
+              editable={false}
+            />
+            <Pressable style={styles.dateButton} onPress={showCheckinDatePicker}>
+              <Text>Select</Text>
+            </Pressable>
+          </View>
+          <View style={styles.datePicker}>
+            <DateTimePickerModal
+              isVisible={isCheckoutDatePickerVisible}
+              mode="date"
+              onConfirm={handleCheckoutConfirm}
+              onCancel={hideCheckoutDatePicker}
+            />
+            <TextInput
+              style={styles.dateInput}
+              placeholder="Check-out Date"
+              value={checkoutDate ? format(checkoutDate, 'dd/MM/yyyy') : ''}
+              editable={false}
+            />
+            <Pressable style={styles.dateButton} onPress={showCheckoutDatePicker}>
+              <Text>Select</Text>
+            </Pressable>
+          </View>
         </View>
-      <View style={styles.conttainerBook}>
-      <Text style={styles.titels}> User Name : {name}</Text>
-      <Text style={styles.titels}>Email: {email}</Text>
-      <Text style={styles.titels}>Hotel Name : {hotelname}</Text>
-      <Text style={styles.titels}>Price: {price}</Text>
-      <View style={styles.datestyle}>
-
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
-        />
-        <TextInput
-          style={{ marginTop: 20, padding: 10, borderWidth: 1, width: 210, height: 40, borderColor: '#D8A123' }}
-          placeholder="Selected Date"
-          value={selectedDate ? format(selectedDate, 'dd/MM/yyyy') : ''}
-          editable={false}
-        />
-
-        <Pressable style={{ backgroundColor: '#D8A123', width: 60, height: 40, padding: 10, marginTop: 20 }}
-          onPress={showDatePicker} >
-          <Text>select date</Text>
-        </Pressable>
+        <Text style={styles.titles}>Total Nights: {totalNights}</Text>
+        <Text style={styles.titles}>Total Price: {totalPrice}</Text>
+        <Text>Choose Payment Method:</Text>
+        <View style={styles.paymentOptions}>
+         9
+          <TouchableOpacity
+            style={[styles.paymentButton, paymentMethod === 'visa' && styles.selectedPayment]}
+            onPress={() => handlePaymentMethodChange('visa')}>
+            <Text>Visa</Text>
+          </TouchableOpacity>
+        </View>
+        {paymentMethod === 'visa' && (
+          <View style={styles.paymentDetails}>
+            <TextInput
+              style={styles.paymentInput}
+              placeholder="CVV"
+              value={paymentDetails.cvv}
+              onChangeText={(text) => handlePaymentDetailsChange('cvv', text)}
+            />
+          </View>
+        )}
+        <TouchableOpacity style={styles.bookButton} onPress={bookNow}>
+          <Text style={styles.bookTitle}>Book Now</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.bookstyle} onPress={()=>addNewReservation(auth.currentUser.uid+id)}>
-        <Text style={styles.bookTitle}>Book Now</Text>
-      </TouchableOpacity>
-      </View>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
     backgroundColor: '#f8f8f8',
     paddingVertical: 20,
   },
-  datestyle: {
-    flex: 0.1,
-    flexDirection: 'row'
-  },
-  
-  bookstyle: {
-    backgroundColor: '#D8A123',
+  header: {
+    backgroundColor: 'rgba(300, 120, 0, 0.3)',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '50%',
-    height: 35,
-    borderRadius: 20,
-
-    marginVertical: 100
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%'
   },
-  bookTitle: {
-    alignContent: 'center',
-    justifyContent: 'center',
-
+  headerText: {
+    color: '#F4C14C',
+    fontSize: 35,
+    fontWeight: 'bold',
   },
-  titels: {
+  containerBook: {
+    alignItems: 'center',
+    flex: 1
+  },
+  titles: {
     marginTop: 20,
     padding: 10,
     borderWidth: 1,
@@ -205,26 +277,82 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#D8A123',
     borderRadius: 20,
-    color:'#F4C14C'
+    color: '#F4C14C'
   },
-  header: {
-    backgroundColor: 'rgba(300, 120, 0, 0.3)',
+  dateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+  datePicker: {
+    flexDirection: 'row',
     alignItems: 'center',
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    width:'100%'
-    
-    
   },
-  headerText: {
+  dateInput: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    width: 100,
+    height: 40,
+    borderColor: '#D8A123',
+    borderRadius: 20,
     color: '#F4C14C',
-    fontSize: 35,
-    fontWeight: 'bold',
   },
-  conttainerBook:{
-    alignItems:'center',
-   
-    flex:1
-  }
-})
+  dateButton: {
+    backgroundColor: '#D8A123',
+    width: 80,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginLeft: 10,
+    marginTop: 20
+  },
+  paymentOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 10,
+  },
+  paymentButton: {
+    backgroundColor: '#D8A123',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '40%',
+    height: 35,
+    borderRadius: 20,
+  },
+  selectedPayment: {
+    backgroundColor: '#F4C14C',
+  },
+  paymentDetails: {
+    marginTop: 10,
+    paddingHorizontal: 20,
+  },
+  paymentInput: {
+    marginTop: 5,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#D8A123',
+    borderRadius: 20,
+  },
+  bookButton: {
+    backgroundColor: '#D8A123',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height: 35,
+    borderRadius: 20,
+    marginVertical: 10
+  },
+  bookTitle: {
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+});
+
 export default CalendarInput;
