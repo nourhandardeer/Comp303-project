@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ImageBackground ,Pressable,Sc
 import { router } from 'expo-router';
 import Category from '../components/category';
 import Trending from '../components/trending';
+import SearchBar from '../components/SearchBar';
 
 
 const mainBackground = require('../assets/images/main.jpg');
@@ -27,6 +28,7 @@ export default function App() {
 
         </View>
       </View>
+      <SearchBar/>
       <ScrollView>
       
       
