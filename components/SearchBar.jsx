@@ -1,15 +1,13 @@
-import React, { useState , useEffect} from 'react';
-import { StyleSheet, TextInput, View, TouchableOpacity,Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo icons library
-import { hotelsData } from "../data/hotelsData";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, View, TouchableOpacity, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { router } from 'expo-router';
+import { useRoute, useRouter } from 'expo-router';
 
 const SearchBar = ({ onSearch }) => {
- 
   const [name, setName] = useState("");
-  const [hotels,setHotels] = useState("");
+  const [hotels, setHotels] = useState([]);
 
   useEffect(() => {
     const fetchHotelsFromFirestore = async () => {
@@ -18,7 +16,6 @@ const SearchBar = ({ onSearch }) => {
         const querySnapshot = await getDocs(hotelsCollectionRef);
         const hotelsData = querySnapshot.docs.map(doc => doc.data());
         setHotels(hotelsData);
-        
       } catch (error) {
         console.error('Error fetching hotels from Firestore:', error);
       }
@@ -28,41 +25,36 @@ const SearchBar = ({ onSearch }) => {
     fetchHotelsFromFirestore();
   }, []);
 
-
-  
   const searchItems = (searchFor) => {
     console.log('searchFor', searchFor);
-    const filteredHotels = hotelsData.filter((item) =>
+    const filteredHotels = hotels.filter((item) =>
       item.name.toLowerCase().includes(searchFor.toLowerCase())
     );
-  
     const hotelIds = filteredHotels.map((hotel) => hotel.id);
     return hotelIds;
   }
-  
 
-
-      
-
-   
+  const router = useRouter();
 
   return (
     <View style={styles.searchContainer}>
       <TextInput
         style={styles.input}
         placeholder="Search..."
-        onChangeText={(t) => {setName(t); searchItems(t)}}
+        onChangeText={(text) => setName(text)}
+        value={name}
       />
-      <TouchableOpacity style={styles.searchButton} onPress={() => {
-        const hotelIds = searchItems(name); // Call searchItems function with the search term
-        if (hotelIds.length > 0) {
-          // Assuming you want to navigate to the details of the first hotel in the filtered list
-          router.push({ pathname: '/hotelDetails', params: { id: hotelIds[0] } });
-        } else {
-          // Handle case when no hotels are found
-          console.log('No hotels found with the given name.');
-        }
-      }}>
+      <TouchableOpacity
+        style={styles.searchButton}
+        onPress={() => {
+          const hotelIds = searchItems(name);
+          if (hotelIds.length > 0) {
+            router.push({ pathname: '/hotelDetails', params: { id: hotelIds[0] } });
+          } else {
+            console.log('No hotels found with the given name.');
+          }
+        }}
+      >
         <Ionicons name="search" size={24} color="black" />
       </TouchableOpacity>
     </View>
