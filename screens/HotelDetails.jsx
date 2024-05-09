@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity, TextInput } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import Header from '../components/header';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -133,8 +133,13 @@ const HotelDetails = () => {
             </View>
           </>
         )}
+        <TouchableOpacity style={styles.bookstyle} onPress={() => router.push({ pathname: '/Calendar', params: { id:id , price:hotelDetails.price,hotelname :hotelDetails.name,place:hotelDetails.destination } })}>
+            <Text style={styles.bookTitle}>Book Now</Text>
+          </TouchableOpacity>
       </ScrollView>
+      
     </View>
+    
   );
 };
 
@@ -244,6 +249,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  bookstyle:{
+    backgroundColor:'#D8A123',
+    alignContent:'center',
+     justifyContent:'center',
+     width:'50%',
+     height:35,
+     borderRadius:20,
+     marginLeft:70,
+     marginVertical:10
+      },
+      bookTitle:{
+        alignContent:'center',
+     justifyContent:'center',
+     marginLeft:50
+      }
 });
 
 export default HotelDetails;
