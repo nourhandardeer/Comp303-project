@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 import Header from '../components/header';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -88,6 +88,9 @@ const HotelDetails = () => {
                   <Text style={styles.facilityText}>{facility}</Text>
                 </View>
               ))}
+              <TouchableOpacity style={styles.bookstyle} onPress={() => router.push({ pathname: '/Calendar', params: { id:id , price:hotelDetails.price,hotelname :hotelDetails.name,place:hotelDetails.destination } })}>
+            <Text style={styles.bookTitle}>Book Now</Text>
+          </TouchableOpacity>
             </View>
           </View>
         </>

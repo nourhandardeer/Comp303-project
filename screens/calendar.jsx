@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity,ImageBackground,Image } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
-import { useLocalSearchParams } from 'expo-router';
+import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 import Header from '../components/header';
 import { collection, addDoc, getDocs, query, where,doc,setDoc,getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -11,6 +11,7 @@ import { getAuth } from "firebase/auth"
 
 
 const CalendarInput = () => {
+  const mainBackground = require('../assets/images/main.jpg');
   const { id, price, hotelname, place } = useLocalSearchParams();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -18,7 +19,7 @@ const CalendarInput = () => {
   const [hotelDate, sethotelDate] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-
+  const [user,setUser]=useState(null)
 
   const [error, setError] = useState(null);
 
@@ -57,6 +58,7 @@ const CalendarInput = () => {
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data());
       const data = docSnap.data();
+      setUser(docSnap.data());
       setName(data.username);
       setEmail(data.email);
 
@@ -64,7 +66,8 @@ const CalendarInput = () => {
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
-      setError('Failed to fetch hotel details. Please try again later.');
+      router.replace("/login");
+      
     }
 
   };
@@ -111,14 +114,11 @@ const CalendarInput = () => {
   const handleConfirm = (date) => {
     hideDatePicker();
     setSelectedDate(date);
-    console.log(id);
-    console.log(place);
-    console.log(email);
-    console.log((auth.currentUser.uid+hotelname))
+    
+console.log(user)
 
 
   };
-
 
   if (error) {
     return (
@@ -127,15 +127,20 @@ const CalendarInput = () => {
       </View>
     );
   }
-
+ 
 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heder}> User Name : {name}</Text>
-      <Text style={styles.heder}>Email: {email}</Text>
-      <Text style={styles.heder}>Hotel Name : {hotelname}</Text>
-      <Text style={styles.heder}>Price: {price}</Text>
+       <ImageBackground source={mainBackground} style={styles.background} >
+       <View style={styles.header}>
+        <Text style={styles.headerText}>EgyptToGo</Text>
+        </View>
+      <View style={styles.conttainerBook}>
+      <Text style={styles.titels}> User Name : {name}</Text>
+      <Text style={styles.titels}>Email: {email}</Text>
+      <Text style={styles.titels}>Hotel Name : {hotelname}</Text>
+      <Text style={styles.titels}>Price: {price}</Text>
       <View style={styles.datestyle}>
 
         <DateTimePickerModal
@@ -160,14 +165,15 @@ const CalendarInput = () => {
       <TouchableOpacity style={styles.bookstyle} onPress={()=>addNewReservation(auth.currentUser.uid+id)}>
         <Text style={styles.bookTitle}>Book Now</Text>
       </TouchableOpacity>
+      </View>
+      </ImageBackground>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+   
     backgroundColor: '#f8f8f8',
     paddingVertical: 20,
   },
@@ -175,6 +181,7 @@ const styles = StyleSheet.create({
     flex: 0.1,
     flexDirection: 'row'
   },
+  
   bookstyle: {
     backgroundColor: '#D8A123',
     alignItems: 'center',
@@ -183,14 +190,14 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 20,
 
-    marginVertical: 30
+    marginVertical: 100
   },
   bookTitle: {
     alignContent: 'center',
     justifyContent: 'center',
 
   },
-  heder: {
+  titels: {
     marginTop: 20,
     padding: 10,
     borderWidth: 1,
@@ -198,6 +205,26 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#D8A123',
     borderRadius: 20,
+    color:'#F4C14C'
+  },
+  header: {
+    backgroundColor: 'rgba(300, 120, 0, 0.3)',
+    alignItems: 'center',
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    width:'100%'
+    
+    
+  },
+  headerText: {
+    color: '#F4C14C',
+    fontSize: 35,
+    fontWeight: 'bold',
+  },
+  conttainerBook:{
+    alignItems:'center',
+   
+    flex:1
   }
 })
 export default CalendarInput;
