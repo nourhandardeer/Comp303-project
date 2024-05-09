@@ -112,6 +112,7 @@ const HotelDetails = () => {
               <Text style={styles.reviewsTitle}>Reviews</Text>
               {reviews.map((review, index) => (
                 <View key={index} style={styles.reviewItem}>
+                  <Text style={styles.reviewSign}>{"\u2022"}</Text> 
                   <Text style={styles.reviewText}>{review}</Text>
                 </View>
               ))}
@@ -195,6 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 20,
+    marginRight:275
   },
   reviewsTitle: {
     fontSize: 20,
@@ -203,16 +205,26 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   reviewItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
+  },
+  reviewSign: {
+    fontSize: 16,
+    color: '#666',
+    marginRight: 5, // Add spacing between the sign and the review text
   },
   reviewText: {
     fontSize: 16,
     color: '#666',
+    textAlign: 'left', // Align review text to the left
   },
   addReviewContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    paddingHorizontal: 20, // Add paddingHorizontal for spacing
+    justifyContent: 'space-between', // Aligns items to the left and right
   },
   reviewInput: {
     borderWidth: 1,
