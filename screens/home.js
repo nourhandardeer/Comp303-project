@@ -8,7 +8,10 @@ import SearchBar from '../components/SearchBar';
 
 const mainBackground = require('../assets/images/main.jpg');
 
+
 export default function App() {
+
+  
   
   return (
     <View style={styles.container}>

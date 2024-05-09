@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window');
 const SLIDESHOW_HEIGHT = 400; // Adjust the height of the slideshow here
 
 const HotelDetails = () => {
-  const { id } = useLocalSearchParams();
+  const { id,name } = useLocalSearchParams();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
