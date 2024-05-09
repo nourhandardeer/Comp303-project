@@ -76,6 +76,9 @@ useEffect(() => {
           </View>
           <Text style={styles.hotelDescription}>{item.description}</Text>
           <Text style={styles.hotelPrice}>{item.price}</Text>
+          <TouchableOpacity style={styles.bookstyle} onPress={() => router.push({ pathname: '/Calendar', params: { id: item.id , price:item.price,hotelname :item.name,place:item.destination } })}>
+            <Text style={styles.bookTitle}>Book Now</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
@@ -156,7 +159,22 @@ const styles = StyleSheet.create({
   },
   list:{
     marginTop:30,
-  }
+  },
+  bookstyle:{
+    backgroundColor:'#D8A123',
+    alignContent:'center',
+     justifyContent:'center',
+     width:'50%',
+     height:35,
+     borderRadius:20,
+     marginLeft:70,
+     marginVertical:10
+      },
+      bookTitle:{
+        alignContent:'center',
+     justifyContent:'center',
+     marginLeft:50
+      }
 });
 
 
