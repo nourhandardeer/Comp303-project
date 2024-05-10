@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, Pressable, ScrollView,Image } 
 import { useLocation, useLocalSearchParams } from 'expo-router'; // Import useLocalSearchParams
 import Category from '../components/category';
 import Trending from '../components/trending';
+import SearchBar from '../components/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
 import { auth , db } from '../firebase/config';
 import { router } from 'expo-router';
@@ -42,6 +43,19 @@ export default function User() {
 
     fetchUserProfile();
   }, []);
+
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        console.log("User signed out successfully");
+        router.replace("Home")
+        // Perform any additional actions after logout if needed
+      })
+      .catch(error => {
+        console.error("Error signing out:", error);
+      });
+  };
+
   
   return (
     <View style={styles.container}>
@@ -50,7 +64,7 @@ export default function User() {
           <Text style={styles.headerText}>EgyptToGo</Text>
           <View style={styles.headerButtons}>
          
-          <Pressable style={styles.button} onPress={() => router.replace("/logout")}>
+          <Pressable style={styles.button} onPress={handleLogout}>
               <AntDesign name="logout" size={24} color="white" />
           </Pressable>
           <Pressable onPress={() => router.replace("/Profile")} style={styles.profileImageContainer}>
@@ -59,6 +73,7 @@ export default function User() {
           </View>
         </View>
         <ScrollView>
+        <SearchBar/>
           <View style={styles.top}>
             <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
             <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>

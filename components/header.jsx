@@ -2,10 +2,19 @@ import React from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { router } from 'expo-router';
+import { auth } from '../firebase/config'; // Assuming you have Firebase auth imported
 
 const Header = () => {
+  
   const handleBack = () => {
-    router.replace("Home");
+    // Check if the user is logged in
+    if (auth.currentUser) {
+      // User is logged in, navigate to "user" route
+      router.replace("user");
+    } else {
+      // User is not logged in, navigate to "Home" route
+      router.replace("Home");
+    }
   };
 
   return (
@@ -33,7 +42,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     marginLeft: 10, 
-    
   },
 });
 

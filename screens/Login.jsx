@@ -5,6 +5,8 @@ import { login } from "../firebase/auth";
 import Header from '../components/header'
 import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
 import { auth } from '../firebase/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const backgroundImage = require('../assets/images/bg.jpg');
 
 const Login = () => {
@@ -21,6 +23,8 @@ const Login = () => {
       const currentUser = auth.currentUser;
       if (currentUser) {
         const userId = currentUser.uid;
+        // Set isLoggedIn flag to true in AsyncStorage
+        await AsyncStorage.setItem('isLoggedIn', 'true');
         // Navigate to user profile screen after successful login
         router.push({ pathname: '/user', params: { userId: userId } });
       } else {
@@ -32,6 +36,7 @@ const Login = () => {
       setError(error.message); // Set error message instead of error object
     }
   };
+  
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
