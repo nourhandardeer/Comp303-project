@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { auth } from '../firebase/config';
+import Header from '../components/header';
 
 
 const CalendarInput = () => {
@@ -176,12 +177,14 @@ const CalendarInput = () => {
 
   return (
     <View style={styles.container}>
+      <Header/>
       <ScrollView>
       {/* <ImageBackground source={mainBackground} style={styles.background} > */}
       {/* <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
       </View> */}
       <View style={styles.header}>
+
   <Text style={styles.headerText}>Reservation form</Text>
 </View>
       <View style={styles.containerBook}>

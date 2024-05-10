@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
+// HotelDetails.js
+
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import Header from '../components/header';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { app } from '../firebase/config';
+import { getAuth } from 'firebase/auth';
+import ReviewItem from '../components/ReviewItem'; // Import the ReviewItem component
 
 const { width } = Dimensions.get('window');
-const SLIDESHOW_HEIGHT = 400; // Adjust the height of the slideshow here
+const SLIDESHOW_HEIGHT = 400;
 
 const HotelDetails = () => {
-  const { id,name } = useLocalSearchParams();
+  const auth = getAuth(app);
+  const { id } = useLocalSearchParams();
   const [hotelDetails, setHotelDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userReview, setUserReview] = useState('');
   const [reviews, setReviews] = useState([]);
+  const scrollViewRef = useRef();
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -24,11 +31,11 @@ const HotelDetails = () => {
       try {
         const hotelDocRef = doc(db, 'hotels', id);
         const docSnap = await getDoc(hotelDocRef);
-        console.log (id)
 
         if (docSnap.exists()) {
-          setHotelDetails(docSnap.data());
-          setReviews(docSnap.data().reviews || []);
+          const data = docSnap.data();
+          setHotelDetails(data);
+          setReviews(data.reviews || []);
         } else {
           setError('Hotel details not found.');
         }
@@ -47,16 +54,52 @@ const HotelDetails = () => {
 
   const handleAddReview = async () => {
     try {
+      const currentUser = auth.currentUser;
+  
+      if (!currentUser) {
+        console.error('No user is currently logged in.');
+        return;
+      }
+  
+      // Get user data from Firestore
+      const userDocRef = doc(db, 'users', currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (!userDocSnap.exists()) {
+        console.error('User document does not exist in the database.');
+        return;
+      }
+  
+      const userData = userDocSnap.data();
+      const username = userData.username;
+      const userImage = userData.profileUrl;
+  
+      if (!username || !userImage) {
+        console.error('Username or user image is missing.');
+        return;
+      }
+  
       const hotelDocRef = doc(db, 'hotels', id);
+      const newReview = {
+        text: userReview,
+        username: username,
+        userImage: userImage,
+      };
+  
       await updateDoc(hotelDocRef, {
-        reviews: arrayUnion(userReview),
+        reviews: arrayUnion(newReview),
       });
-      setReviews([...reviews, userReview]);
+  
+      setReviews([...reviews, newReview]);
       setUserReview('');
-      console.log("added")
     } catch (error) {
       console.error('Error adding review:', error);
-      // Handle error
+    }
+  };
+  
+  const handlePressReviews = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
     }
   };
 
@@ -76,18 +119,10 @@ const HotelDetails = () => {
     );
   }
 
-  if (!hotelDetails) {
-    return (
-      <View style={styles.container}>
-        <Text>No hotel details found.</Text>
-      </View>
-    );
-  }
-
   return (
     <View>
       <Header />
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.scrollViewContent}>
         {hotelDetails && hotelDetails.details && (
           <>
             <ScrollView horizontal pagingEnabled style={styles.imageContainer}>
@@ -98,23 +133,23 @@ const HotelDetails = () => {
               ))}
             </ScrollView>
             <View style={styles.detailsContainer}>
+              <Text style={styles.header}>Description</Text>
               <Text style={styles.additionalDescription}>{hotelDetails.details.additionalDescription}</Text>
+              <Text style={styles.header}>Facilities</Text>
               <View style={styles.facilitiesContainer}>
-                <Text style={styles.facilitiesTitle}>Facilities</Text>
                 {hotelDetails.details.facilities.map((facility, index) => (
-                  <View key={index} style={styles.facilityItem}>
-                    <Text style={styles.facilityText}>{facility}</Text>
-                  </View>
+                  <Text key={index} style={styles.facilityText}>{facility}</Text>
                 ))}
               </View>
+              {/* Rating Section */}
+              {/* Implement your rating component here */}
             </View>
+            <TouchableOpacity onPress={handlePressReviews}>
+              <Text style={styles.header1}>Reviews</Text>
+            </TouchableOpacity>
             <View style={styles.reviewsContainer}>
-              <Text style={styles.reviewsTitle}>Reviews</Text>
               {reviews.map((review, index) => (
-                <View key={index} style={styles.reviewItem}>
-                  <Text style={styles.reviewSign}>{"\u2022"}</Text> 
-                  <Text style={styles.reviewText}>{review}</Text>
-                </View>
+                <ReviewItem key={index} review={review} />
               ))}
             </View>
             <View style={styles.addReviewContainer}>
@@ -134,12 +169,10 @@ const HotelDetails = () => {
           </>
         )}
         <TouchableOpacity style={styles.bookstyle} onPress={() => router.push({ pathname: '/Calendar', params: { id:id , price:hotelDetails.price,hotelname :hotelDetails.name,place:hotelDetails.destination } })}>
-            <Text style={styles.bookTitle}>Book Now</Text>
-          </TouchableOpacity>
+          <Text style={styles.bookTitle}>Booking</Text>
+        </TouchableOpacity>
       </ScrollView>
-      
     </View>
-    
   );
 };
 
@@ -157,15 +190,13 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: 'row',
     marginBottom: 20,
-    backgroundColor: '#000',
-    height: SLIDESHOW_HEIGHT,
   },
   imageItem: {
     width,
   },
   hotelImage: {
     width: '100%',
-    height: '100%',
+    height: SLIDESHOW_HEIGHT,
     resizeMode: 'cover',
   },
   detailsContainer: {
@@ -173,63 +204,45 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
   },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  header1: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginLeft:20
+  },
   additionalDescription: {
     fontSize: 16,
     marginBottom: 20,
     color: '#333',
   },
   facilitiesContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingTop: 20,
-  },
-  facilitiesTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
-  },
-  facilityItem: {
-    marginBottom: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   facilityText: {
     fontSize: 16,
     color: '#666',
+    marginRight: 10,
+    marginBottom: 10,
   },
   reviewsContainer: {
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 20,
-    marginRight:275
-  },
-  reviewsTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'right',
-  },
-  reviewItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  reviewSign: {
-    fontSize: 16,
-    color: '#666',
-    marginRight: 5, // Add spacing between the sign and the review text
-  },
-  reviewText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'left', // Align review text to the left
   },
   addReviewContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    paddingHorizontal: 20, // Add paddingHorizontal for spacing
-    justifyContent: 'space-between', // Aligns items to the left and right
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingRight: 20,
   },
   reviewInput: {
     borderWidth: 1,
@@ -237,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     height: 40,
-    width: '50%', // Adjust width as needed
+    width: '50%',
   },
   addButton: {
     backgroundColor: '#D8A123',
@@ -249,21 +262,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  bookstyle:{
-    backgroundColor:'#D8A123',
-    alignContent:'center',
-     justifyContent:'center',
-     width:'50%',
-     height:35,
-     borderRadius:20,
-     marginLeft:70,
-     marginVertical:10
-      },
-      bookTitle:{
-        alignContent:'center',
-     justifyContent:'center',
-     marginLeft:50
-      }
+  bookstyle: {
+    backgroundColor: '#D8A123',
+    alignContent: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height: 35,
+    borderRadius: 20,
+    marginLeft: 70,
+    marginVertical: 10,
+  },
+  bookTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    alignSelf: 'center',
+  },
 });
 
 export default HotelDetails;
