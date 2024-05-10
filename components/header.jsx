@@ -1,20 +1,51 @@
-import React from 'react';
+import React ,{useState,useEffect}from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { router } from 'expo-router';
-import { auth } from '../firebase/config'; // Assuming you have Firebase auth imported
+import { auth, db } from '../firebase/config';
+import { collection, getDoc, query, where ,doc} from "firebase/firestore";
 
 const Header = () => {
+  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Fetch user document from Firestore
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setIsAdmin(userData.admin );
+        } else {
+          console.error('User document does not exist.');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData(); // Fetch user data on component mount
+  }, []);
   
   const handleBack = () => {
-    // Check if the user is logged in
+    
+      
+    
     if (auth.currentUser) {
-      // User is logged in, navigate to "user" route
-      router.replace("user");
+      
+      if (isAdmin) {
+        
+        router.replace("admin"); 
+      } else {
+        
+        router.replace("user"); 
+      }
     } else {
-      // User is not logged in, navigate to "Home" route
-      router.replace("Home");
+      
+      router.replace("Home"); 
     }
+   console.log(isAdmin)
   };
 
   return (

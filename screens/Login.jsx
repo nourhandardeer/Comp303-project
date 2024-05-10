@@ -1,10 +1,11 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground } from "react-native";
 import { login } from "../firebase/auth";
 import Header from '../components/header'
 import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
+import { collection, getDoc, query, where ,doc} from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const backgroundImage = require('../assets/images/bg.jpg');
@@ -13,20 +14,43 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  
+  
 
   const handleLogin = async () => {
     try {
       const credentials = await login(email, password);
       console.log('credentials', credentials);
   
-      // Get the current user ID
+      // Get the current user
       const currentUser = auth.currentUser;
+  
       if (currentUser) {
+        // Get the current user ID
         const userId = currentUser.uid;
+  
         // Set isLoggedIn flag to true in AsyncStorage
         await AsyncStorage.setItem('isLoggedIn', 'true');
-        // Navigate to user profile screen after successful login
-        router.push({ pathname: '/user', params: { userId: userId } });
+  
+        // Get the user document from Firestore
+        const userDocRef = doc(db, 'users', userId);
+        const userDocSnap = await getDoc(userDocRef);
+  
+        if (userDocSnap.exists()) {
+          // Check if the user is an admin
+          const isAdmin = userDocSnap.data().admin;
+  
+          if (isAdmin) {
+            // If user is admin, navigate to admin screen
+            router.push({ pathname: '/admin', params: { userId: userId } });
+          } else {
+            // If user is not admin, navigate to user screen
+            router.push({ pathname: '/user', params: { userId: userId } });
+          }
+        } else {
+          // Handle case where user document doesn't exist
+          setError("User document not found.");
+        }
       } else {
         // Handle error if user is not logged in
         setError("User is not logged in.");
