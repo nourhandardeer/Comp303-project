@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { sendPasswordReset} from "../firebase/auth";
+import Header from '../components/header'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ const ForgotPassword = () => {
 
   return (
     <View style={styles.container}>
+       <Header />
       <Text style={styles.title}>Forgot Password</Text>
       <TextInput
         placeholder="Email"
@@ -36,7 +38,10 @@ const ForgotPassword = () => {
         onChangeText={setEmail}
         style={styles.input}
       />
-      <Button title="Reset Password" onPress={handleResetPassword} />
+     <Pressable onPress={handleResetPassword} style={styles.resetButton}>
+  <Text style={styles.resetButtonText}>Reset Password</Text>
+</Pressable>
+
       {message ? <Text style={styles.successMessage}>{message}</Text> : null}
       {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
       <Pressable onPress={() => router.replace("/account/login")}>
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F2E2C9", // Beige background color
+    backgroundColor: "white", // Beige background color
   },
   title: {
     fontSize: 24,
@@ -79,10 +84,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   link: {
-    color: "#007BFF",
+    color: "black",
     fontSize: 16,
     marginTop: 20,
   },
+  resetButton: {
+    backgroundColor: '#D8A123', // Set button background color to orange
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resetButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  
 });
 
 export default ForgotPassword;

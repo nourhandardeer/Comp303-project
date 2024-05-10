@@ -56,7 +56,7 @@ const Register = () => {
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.background}>
+    // <ImageBackground source={backgroundImage} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
         <Header />
         <View style={styles.overlay}>
@@ -144,7 +144,7 @@ const Register = () => {
           <Text style={styles.error}>{error}</Text>
         </View>
       </ScrollView>
-    </ImageBackground>
+    /* </ImageBackground> */
   );
 };
 
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
-    backgroundColor: 'rgba(173, 216, 230, 0.8)', // Baby blue with opacity
+    backgroundColor: 'white', // Baby blue with opacity
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   signupButton: {
-    backgroundColor: '#ADD8E6', // Baby blue color
+    backgroundColor: '#D8A123', // Baby blue color
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
