@@ -109,9 +109,9 @@ export default function Profile() {
             </View>
             <View style={styles.cont2}>
             < Image  source={icon} style={styles.icons}/>
-          <TouchableOpacity>
-            <Text style={{color:'black',fontSize: 20,marginTop:5,marginLeft:15}}>my reservations</Text>
-          </TouchableOpacity>
+            <Pressable style={styles.button} onPress={() => router.replace("/Reservation")} > 
+            <Text style={styles.buttonText}>Reservations</Text> 
+          </Pressable>
           </View>
           </View>
 
