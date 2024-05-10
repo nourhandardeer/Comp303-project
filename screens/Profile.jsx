@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
   profileView: {
     marginTop: 100,
     alignItems: 'center',
+    
   },
   profileitem: {
     backgroundColor: 'rgba(244, 193, 76, 0.9)', // Slightly transparent yellow matching button color
@@ -142,19 +143,19 @@ const styles = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
-    marginRight: 10,
+    marginRight: 2,
   },
   fieldLabel: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   fieldValue: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 19,
   },
   button: {
-    backgroundColor: 'rgba(244, 193, 76, 0.9)', // Slightly transparent yellow matching button color
+    backgroundColor: '#D8A123', 
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -183,4 +184,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'center',
   },
+  
 });

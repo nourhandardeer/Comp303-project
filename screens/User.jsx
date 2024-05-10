@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
 import { auth , db } from '../firebase/config';
 import { router } from 'expo-router';
+import { FontAwesome  } from '@expo/vector-icons'; 
 import { collection, addDoc, getDocs, query, where,doc,setDoc,getDoc } from 'firebase/firestore';
 
 import Profile from './Profile';
@@ -74,12 +75,26 @@ export default function User() {
         </View>
         <ScrollView>
         <SearchBar/>
-          <View style={styles.top}>
-            <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
-            <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
+        <View style={styles.top}>
+            <View style={styles.gradient}>
+              <Text style={styles.qouteText}> Prepare to be enchanted by the wonders of this timeless land,</Text>
+              <Text style={styles.qouteText}> where every corner holds a story waiting to be discovered</Text>
+            </View>
           </View>
+
           <Category />
           <Trending />
+          <View style={styles.contact}>
+            <Text style={styles.contactText}>Contact Us</Text>
+            <View style={styles.contactInfo}>
+              <FontAwesome  name="envelope" size={24} color="white" style={styles.icon} />
+              <Text style={styles.infoText}>info@egypttogo.com</Text>
+            </View>
+            <View style={styles.contactInfo}>
+              <FontAwesome  name="phone" size={24} color="white" style={styles.icon} />
+              <Text style={styles.infoText}>+201110783824</Text>
+            </View>
+          </View>
         </ScrollView>
         <View style={styles.footer}>
           <Text style={styles.footerText}>&copy; 2024 Your App. All rights reserved.</Text>
@@ -123,7 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   qouteText: {
-    fontSize: 40,
+    fontSize: 36,
     marginBottom: 10,
     color: 'white',
     fontFamily: 'Futura-CondensedMedium',
@@ -159,5 +174,34 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     marginLeft: 10, // Adjust the spacing if needed
+  },
+  gradient: {
+    borderRadius: 10,
+    padding: 20,
+    backgroundColor: 'rgba(300, 120, 0, 0.2)',
+  },
+  contact: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    padding: 20,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  contactText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  contactInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom:10
+  },
+  icon: {
+    marginRight: 10,
+  },
+  infoText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
