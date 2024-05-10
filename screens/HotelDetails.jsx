@@ -162,6 +162,7 @@ const HotelDetails = () => {
               <TextInput
                 style={styles.reviewInput}
                 placeholder="Add your review"
+                placeholderTextColor="gray" 
                 value={userReview}
                 onChangeText={setUserReview}
               />

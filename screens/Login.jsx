@@ -48,6 +48,7 @@ const Login = () => {
             <AntDesign name="mail" size={24} color="#D8A123" style={styles.icon} />
             <TextInput
               placeholder="Email"
+              placeholderTextColor="gray" 
               value={email}
               onChangeText={setEmail}
               style={styles.input}
@@ -57,6 +58,7 @@ const Login = () => {
             <AntDesign name="lock" size={24} color="#D8A123" style={styles.icon} />
             <TextInput
               placeholder="Password"
+              placeholderTextColor="gray" 
               value={password}
               onChangeText={setPassword}
               secureTextEntry
