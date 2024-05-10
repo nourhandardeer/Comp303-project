@@ -39,13 +39,13 @@ const Login = () => {
   
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.background}>
+    // <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
         <Header />
         <View style={styles.overlay}>
           <Text style={styles.loginText}>Login</Text>
           <View style={styles.inputContainer}>
-            <AntDesign name="mail" size={24} color="black" style={styles.icon} />
+            <AntDesign name="mail" size={24} color="#D8A123" style={styles.icon} />
             <TextInput
               placeholder="Email"
               value={email}
@@ -54,7 +54,7 @@ const Login = () => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <AntDesign name="lock" size={24} color="black" style={styles.icon} />
+            <AntDesign name="lock" size={24} color="#D8A123" style={styles.icon} />
             <TextInput
               placeholder="Password"
               value={password}
@@ -72,7 +72,7 @@ const Login = () => {
           <Text style={styles.error}>{error}</Text>
         </View>
       </View>
-    </ImageBackground>
+    // </ImageBackground>
   );
 };
 
@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: '#D8A123' // Set background color to orange
   },
   container: {
     flex: 1,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   overlay: {
-    backgroundColor: 'rgba(173, 216, 230, 0.8)', // Baby blue with opacity
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // White with opacity
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
@@ -126,9 +127,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontFamily: "Arial",
     fontSize: 16,
+    color: '#333' // Set text color to dark
   },
   link: {
-    color: "#007BFF",
+    color: "black",
     fontSize: 16,
     marginBottom: 10,
     fontFamily: "Arial",
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
   },
   loginButton: {
-    backgroundColor: '#ADD8E6', // Baby blue color
+    backgroundColor: '#D8A123', // Set button background color to orange
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
