@@ -92,15 +92,16 @@ const CalendarInput = () => {
   const calculateNightsAndPrice = (checkoutDate) => {
     if (checkinDate && checkoutDate) {
       const nights = differenceInDays(checkoutDate, checkinDate);
-
-
-      const totalPrice = price * nights;
+  
+      // Extract numerical value from price string
+      const numericalPrice = parseFloat(price.replace(/\D/g, '')); // Remove non-numeric characters
+  
+      const totalPrice = numericalPrice * nights;
       setTotalNights(nights);
       setTotalPrice(totalPrice);
-      console.log(totalPrice)
-      console.log(price);
+      console.log(totalPrice);
+      console.log(numericalPrice);
       console.log(nights);
-
     }
   };
 
@@ -177,9 +178,12 @@ const CalendarInput = () => {
     <View style={styles.container}>
       <ScrollView>
       {/* <ImageBackground source={mainBackground} style={styles.background} > */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
-      </View>
+      </View> */}
+      <View style={styles.header}>
+  <Text style={styles.headerText}>Reservation form</Text>
+</View>
       <View style={styles.containerBook}>
         <Text style={styles.titles}> User Name : {name}</Text>
         <Text style={styles.titles}>Email: {email}</Text>
@@ -187,43 +191,51 @@ const CalendarInput = () => {
         <Text style={styles.titles}>Price Per night: {price}</Text>
         <View style={styles.dateContainer}>
           <View style={styles.datePicker}>
-            <DateTimePickerModal
-              isVisible={isCheckinDatePickerVisible}
-              mode="date"
-              onConfirm={handleCheckinConfirm}
-              onCancel={hideCheckinDatePicker}
-            />
-            <TextInput
-              style={styles.dateInput}
-              placeholder="Check-in Date"
-              value={checkinDate ? format(checkinDate, 'dd/MM/yyyy') : ''}
-              editable={false}
-            />
-            <Pressable style={styles.dateButton} onPress={showCheckinDatePicker}>
-              <Text>Select</Text>
-            </Pressable>
-          </View>
-          <View style={styles.datePicker}>
-            <DateTimePickerModal
-              isVisible={isCheckoutDatePickerVisible}
-              mode="date"
-              onConfirm={handleCheckoutConfirm}
-              onCancel={hideCheckoutDatePicker}
-            />
-            <TextInput
-              style={styles.dateInput}
-              placeholder="Check-out Date"
-              value={checkoutDate ? format(checkoutDate, 'dd/MM/yyyy') : ''}
-              editable={false}
-            />
-            <Pressable style={styles.dateButton} onPress={showCheckoutDatePicker}>
-              <Text>Select</Text>
-            </Pressable>
+          <View style={styles.datePickerContainer}>
+  <View style={styles.datePicker}>
+    <DateTimePickerModal
+      isVisible={isCheckinDatePickerVisible}
+      mode="date"
+      onConfirm={handleCheckinConfirm}
+      onCancel={hideCheckinDatePicker}
+    />
+    <TextInput
+      style={styles.paymentInput}
+      placeholder="Check-in Date"
+      value={checkinDate ? format(checkinDate, 'dd/MM/yyyy') : ''}
+      editable={false}
+    />
+    <Pressable style={styles.dateButton} onPress={showCheckinDatePicker}>
+      <Text>Select</Text>
+    </Pressable>
+  </View>
+  <View style={styles.datePicker}>
+    <DateTimePickerModal
+      isVisible={isCheckoutDatePickerVisible}
+      mode="date"
+      onConfirm={handleCheckoutConfirm}
+      onCancel={hideCheckoutDatePicker}
+    />
+    <TextInput
+      style={styles.paymentInput}
+      placeholder="Check-out Date"
+      value={checkoutDate ? format(checkoutDate, 'dd/MM/yyyy') : ''}
+      editable={false}
+    />
+    <Pressable style={styles.dateButton} onPress={showCheckoutDatePicker}>
+      <Text>Select</Text>
+    </Pressable>
+    
+  </View>
+  <Text style={styles.titles}>Total Nights: {totalNights}</Text>
+        <Text style={styles.titles}>Total Price: {totalPrice}</Text>
+</View>
+
           </View>
         </View>
-        <Text style={styles.titles}>Total Nights: {totalNights}</Text>
-        <Text style={styles.titles}>Total Price: {totalPrice}</Text>
-        <Text>Choose Payment Method:</Text>
+       
+        <Text style={styles.paymentMethodText}>Choose Payment Method:</Text>
+
         <View style={styles.paymentOptions}>
         <TouchableOpacity
   style={[styles.paymentButton, paymentMethod === 'cash' && styles.selectedPayment]}
@@ -309,36 +321,33 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#D8A123',
     borderRadius: 20,
-    color: '#F4C14C'
+    color: 'black'
   },
   dateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,
   },
-  datePicker: {
-    flexDirection: 'row',
+  datePickerContainer: {
+    flexDirection: 'column',
     alignItems: 'center',
   },
   dateInput: {
-    marginTop: 20,
-    padding: 10,
+    width: 200, // Set a specific width
     borderWidth: 1,
-    width: 100,
-    height: 40,
-    borderColor: '#D8A123',
-    borderRadius: 20,
-    color: '#F4C14C',
+    borderColor: "#ccc",
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical:5,
+    fontFamily: "Arial",
+    fontSize: 16,
   },
   dateButton: {
     backgroundColor: '#D8A123',
-    width: 80,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     marginLeft: 10,
-    marginTop: 20
   },
   paymentOptions: {
     flexDirection: 'row',
@@ -366,6 +375,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#D8A123',
     borderRadius: 20,
+    width: 200, // Set a specific width
   },
   bookButton: {
     backgroundColor: '#D8A123',
@@ -385,6 +395,28 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "center"
   },
+  header: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  datePicker: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  paymentMethodText: {
+    fontWeight: 'bold', // Make the text bold
+    fontSize: 20, // Set the font size to be bigger
+    paddingVertical: 10, // Add padding top and bottom
+  },
+  
+  
 });
 
 export default CalendarInput;

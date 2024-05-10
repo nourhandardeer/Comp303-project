@@ -6,6 +6,7 @@ import { app } from '../firebase/config'
 import { getAuth } from "firebase/auth";
 import Header from "../components/header";
 import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 
 const mainBackground = require('../assets/images/main.jpg');
