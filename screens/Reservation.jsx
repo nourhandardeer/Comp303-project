@@ -5,6 +5,7 @@ import { db } from '../firebase/config';
 import { app } from '../firebase/config' 
 import { getAuth } from "firebase/auth"; 
 import Header from '../components/header'; 
+import { router } from 'expo-router';
  
 export default function Reservation() { 
     const [error, setError] = useState(null); 
