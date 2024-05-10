@@ -1,5 +1,3 @@
-// HotelDetails.js
-
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -9,6 +7,7 @@ import { db } from '../firebase/config';
 import { app } from '../firebase/config';
 import { getAuth } from 'firebase/auth';
 import ReviewItem from '../components/ReviewItem'; // Import the ReviewItem component
+import StarRating from '../components/StarRating';
 
 const { width } = Dimensions.get('window');
 const SLIDESHOW_HEIGHT = 400;
@@ -22,6 +21,9 @@ const HotelDetails = () => {
   const [userReview, setUserReview] = useState('');
   const [reviews, setReviews] = useState([]);
   const scrollViewRef = useRef();
+
+  // Fake ratings for each hotel (setting all ratings to 5)
+  const fakeRatings = Array(5).fill(5); 
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -133,6 +135,11 @@ const HotelDetails = () => {
               ))}
             </ScrollView>
             <View style={styles.detailsContainer}>
+  <Text style={styles.header}>Rating</Text>
+  <View style={styles.starContainer}>
+    
+    <StarRating rating={4} starSize={20} filledColor="#D8A123" emptyColor="#ccc" />
+  </View>
               <Text style={styles.header}>Description</Text>
               <Text style={styles.additionalDescription}>{hotelDetails.details.additionalDescription}</Text>
               <Text style={styles.header}>Facilities</Text>
@@ -141,8 +148,7 @@ const HotelDetails = () => {
                   <Text key={index} style={styles.facilityText}>{facility}</Text>
                 ))}
               </View>
-              {/* Rating Section */}
-              {/* Implement your rating component here */}
+             
             </View>
             <TouchableOpacity onPress={handlePressReviews}>
               <Text style={styles.header1}>Reviews</Text>
@@ -276,6 +282,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     alignSelf: 'center',
+  },
+  starContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starImage: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
   },
 });
 

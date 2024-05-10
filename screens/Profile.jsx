@@ -46,6 +46,7 @@ export default function Profile() {
     <View style={styles.container}>
       <Header />
       <View style={styles.profileView}>
+      <Text style={styles.profileHeaderText}>Profile</Text>
         <View style={styles.profileitem}>
           <View style={styles.photocircle}>
             <View style={styles.photo}>
@@ -94,7 +95,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white', // Slightly transparent yellow matching button color
   },
   photo: {
     borderRadius: 999,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   },
   photocircle: {
     borderRadius: 999,
-    backgroundColor: '#D8A123',
+    backgroundColor: 'rgba(244, 193, 76, 0.8)', // Slightly transparent yellow matching button color
     width: 125,
     height: 125,
     alignItems: 'center',
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileitem: {
-    backgroundColor: '#D8A123',
+    backgroundColor: 'rgba(244, 193, 76, 0.9)', // Slightly transparent yellow matching button color
     padding: 20,
     marginVertical: 8,
     width: '90%',
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    backgroundColor: '#F4C14C',
+    backgroundColor: 'rgba(244, 193, 76, 0.9)', // Slightly transparent yellow matching button color
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -173,5 +174,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: 'black',
+  },
+  profileHeaderText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 });

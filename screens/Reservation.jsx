@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   title: {
-    fontSize: 20,
+    fontSize:16,
     fontWeight: 'bold',
     color: 'black', // Same color as the buttons
   },
