@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity , TextInput } from 'react-native';
+import { collection, getDocs,  getDoc , doc ,updateDoc, deleteDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase/config'; // Import auth from Firebase config
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
-import Header from '../components/header'
+import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-router";
+import Header from '../components/header';
+import AdminActions from '../components/AdminActions';
+
+
 
 const Cairo = () => {
   // State to store hotels data fetched from Firestore
@@ -12,7 +15,28 @@ const Cairo = () => {
   // State to track favorite hotels
   const [favorites, setFavorites] = useState([]);
   const params = useLocalSearchParams();
-  
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [updatedPrice, setUpdatedPrice] = useState("");
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Fetch user document from Firestore
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setIsAdmin(userData.admin || false);
+        } else {
+          console.error('User document does not exist.');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const fetchHotelsFromFirestore = async () => {
@@ -21,7 +45,7 @@ const Cairo = () => {
         const querySnapshot = await getDocs(hotelsCollectionRef);
         const hotelsData = querySnapshot.docs.map(doc => doc.data());
         setHotels(hotelsData);
-        
+
       } catch (error) {
         console.error('Error fetching hotels from Firestore:', error);
       }
@@ -30,6 +54,41 @@ const Cairo = () => {
     // Fetch hotels data from Firestore
     fetchHotelsFromFirestore();
   }, []);
+
+  const handleUpdate = async (hotelId, updatedData) => {
+    try {
+      // Reference to the hotel document
+      const hotelRef = doc(db, 'hotels', hotelId.toString());
+      
+      // Fetch the hotel document snapshot
+      const hotelSnapshot = await getDoc(hotelRef);
+      
+      // Check if the hotel document exists
+      if (hotelSnapshot.exists()) {
+        // Update the hotel document in Firestore with the updated data
+        await updateDoc(hotelRef, updatedData);
+        
+        // Log a success message or perform additional actions if needed
+        console.log('Hotel updated successfully:', hotelId);
+      } else {
+        console.error('Hotel document not found:', hotelId);
+      }
+    } catch (error) {
+      console.error('Error updating hotel:', error);
+    }
+  };
+  
+  const handleDelete = async (hotelId) => {
+    try {
+      // Delete hotel document from Firestore
+      await deleteDoc(doc(db, 'hotels', hotelId.toString()));
+      
+      // Log a success message or perform additional actions if needed
+      console.log('Hotel deleted successfully:', hotelId);
+    } catch (error) {
+      console.error('Error deleting hotel:', error);
+    }
+  };
 
   // Filter hotels based on destination 'Cairo'
   const cairoHotels = hotels.filter(hotel => hotel.destination === 'Cairo');
@@ -62,7 +121,16 @@ const Cairo = () => {
           </View>
           <Text style={styles.hotelDescription}>{item.description}</Text>
           <Text style={styles.hotelPrice}>{item.price}</Text>
-          
+          {isAdmin && (
+            <AdminActions
+              hotelId={item.id}
+              name={item.name}
+              description={item.description}
+              price={item.price}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -70,8 +138,9 @@ const Cairo = () => {
 
   return (
     <View style={[styles.container, styles.darkBackground]}>
-      <Header/>
-      <FlatList style={styles.list}
+      <Header />
+      <FlatList
+        style={styles.list}
         data={cairoHotels}
         renderItem={renderHotelItem}
         keyExtractor={(item, index) => index.toString()}
@@ -84,14 +153,14 @@ const Cairo = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20, // Add padding at the top
+    paddingTop: 20,
     paddingHorizontal: 20,
   },
   darkBackground: {
-    backgroundColor: '#333', // Dark mode background color
+    backgroundColor: '#333',
   },
   listContent: {
-    paddingBottom: 20, // Add padding at the bottom
+    paddingBottom: 20,
   },
   hotelItem: {
     marginBottom: 20,
@@ -119,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#fff', // Text color in dark mode
+    color: '#fff',
   },
   destinationContainer: {
     flexDirection: 'row',
@@ -129,36 +198,21 @@ const styles = StyleSheet.create({
   destination: {
     marginLeft: 5,
     fontSize: 16,
-    color: '#aaa', // Text color in dark mode
+    color: '#aaa',
   },
   hotelDescription: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#ccc', // Text color in dark mode
+    color: '#ccc',
   },
   hotelPrice: {
     fontSize: 16,
     fontWeight: 'bold',
     color: 'green',
   },
-  list:{
-    marginTop:30,
+  list: {
+    marginTop: 30,
   },
-  bookstyle:{
-backgroundColor:'#D8A123',
-alignContent:'center',
- justifyContent:'center',
- width:'50%',
- height:35,
- borderRadius:20,
- marginLeft:70,
- marginVertical:10
-  },
-  bookTitle:{
-    alignContent:'center',
- justifyContent:'center',
- marginLeft:50
-  }
 });
 
 export default Cairo;
