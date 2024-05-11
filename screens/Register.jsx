@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Text, Pressable, StyleSheet, ImageBackground, ScrollView } from "react-native";
 import { register } from "../firebase/auth";
 import { db, auth } from '../firebase/config';
-import { doc, setDoc } from "firebase/firestore"; 
+import { collection, doc, getDoc, setDoc } from "firebase/firestore"; 
 import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
 import Header from '../components/header';
 import { router } from 'expo-router';
@@ -19,6 +19,7 @@ const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
+  const [admin, isAdmin] = useState(false);
 
   const handlePress = async () => {
     if (password !== confirm) {
@@ -45,7 +46,8 @@ const Register = () => {
         profileUrl: profileUrl,
         firstName: firstName,
         lastName: lastName,
-        phone: phone
+        phone: phone,
+        admin:false
       });
       // Navigate to login screen after successful registration
       router.replace("/login");
@@ -65,6 +67,7 @@ const Register = () => {
             <AntDesign name="user" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="First Name"
+              placeholderTextColor="gray" 
               value={firstName}
               onChangeText={setFirstName}
               style={styles.input}
@@ -74,6 +77,7 @@ const Register = () => {
             <AntDesign name="user" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Last Name"
+              placeholderTextColor="gray" 
               value={lastName}
               onChangeText={setLastName}
               style={styles.input}
@@ -83,6 +87,7 @@ const Register = () => {
             <AntDesign name="user" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Username"
+              placeholderTextColor="gray" 
               value={username}
               onChangeText={setUsername}
               style={styles.input}
@@ -92,6 +97,7 @@ const Register = () => {
             <AntDesign name="mail" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Email"
+              placeholderTextColor="gray" 
               value={email}
               onChangeText={setEmail}
               style={styles.input}
@@ -101,6 +107,7 @@ const Register = () => {
             <AntDesign name="lock" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Password"
+              placeholderTextColor="gray" 
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -111,6 +118,7 @@ const Register = () => {
             <AntDesign name="lock" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Confirm Password"
+              placeholderTextColor="gray" 
               value={confirm}
               onChangeText={setConfirm}
               secureTextEntry
@@ -121,6 +129,7 @@ const Register = () => {
             <AntDesign name="phone" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Phone Number"
+              placeholderTextColor="gray" 
               value={phone}
               onChangeText={setPhone}
               style={styles.input}
@@ -131,6 +140,7 @@ const Register = () => {
             <AntDesign name="link" size={24} color="black" style={styles.icon} />
             <TextInput
               placeholder="Profile Image URL"
+              placeholderTextColor="gray" 
               value={profileUrl}
               onChangeText={setProfileUrl}
               style={styles.input}

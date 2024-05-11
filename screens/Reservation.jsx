@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { View, Text, StyleSheet, FlatList, Pressable,TouchableOpacity } from 'react-native';
+import { collection, getDocs, query, where ,doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { app } from '../firebase/config';
 import { getAuth } from 'firebase/auth';
@@ -30,6 +30,13 @@ export default function Reservation() {
   const handleCancelReservation = async (reservationId) => {
     try {
       // Implement cancellation logic here
+
+      await deleteDoc(doc(db, "Reservations", reservationId));
+      const q = query(collection(db, 'Reservations'), where('userId', '==', auth.currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      const reservationsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setReservations(reservationsData);
+    
       console.log('Cancel reservation:', reservationId);
     } catch (error) {
       console.error('Error cancelling reservation:', error);
@@ -44,9 +51,9 @@ export default function Reservation() {
       <Text style={styles.detailText}>City: {item.placehotel}</Text>
       <Text style={styles.detailText}>Check-in Date: {item.checkinDate}</Text>
       <Text style={styles.detailText}>Check-out Date: {item.checkoutDate}</Text>
-      <Pressable style={styles.cancelButton} onPress={() => handleCancelReservation(item.id)}>
+      <TouchableOpacity style={styles.cancelButton} onPress={() => handleCancelReservation(item.id)}>
         <Text style={styles.cancelButtonText}>Cancel</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 

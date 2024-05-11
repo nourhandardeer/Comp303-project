@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, ImageBackground, Image ,ScrollView} from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, TouchableOpacity, ImageBackground, Image, ScrollView, Alert } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format, differenceInDays } from 'date-fns';
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -93,10 +93,10 @@ const CalendarInput = () => {
   const calculateNightsAndPrice = (checkoutDate) => {
     if (checkinDate && checkoutDate) {
       const nights = differenceInDays(checkoutDate, checkinDate);
-  
+
       // Extract numerical value from price string
       const numericalPrice = parseFloat(price.replace(/\D/g, '')); // Remove non-numeric characters
-  
+
       const totalPrice = numericalPrice * nights;
       setTotalNights(nights);
       setTotalPrice(totalPrice);
@@ -160,10 +160,12 @@ const CalendarInput = () => {
       }
 
       await setDoc(doc(db, "Reservations", auth.currentUser.uid + id), reservationData);
+      Alert.alert("Booking Successful", "Your booking has been added successfully.");
       // Navigate or perform any action after successful booking
     } catch (error) {
       console.error('Error booking:', error);
       // Handle error
+      Alert.alert("Booking Failed", "There was an error while adding your booking. Please try again later.");
     }
   };
 
@@ -177,118 +179,118 @@ const CalendarInput = () => {
 
   return (
     <View style={styles.container}>
-      <Header/>
+      <Header />
       <ScrollView>
-      {/* <ImageBackground source={mainBackground} style={styles.background} > */}
-      {/* <View style={styles.header}>
+        {/* <ImageBackground source={mainBackground} style={styles.background} > */}
+        {/* <View style={styles.header}>
         <Text style={styles.headerText}>EgyptToGo</Text>
       </View> */}
-      <View style={styles.header}>
+        <View style={styles.header}>
 
-  <Text style={styles.headerText}>Reservation form</Text>
-</View>
-      <View style={styles.containerBook}>
-        <Text style={styles.titles}> User Name : {name}</Text>
-        <Text style={styles.titles}>Email: {email}</Text>
-        <Text style={styles.titles}>Hotel Name : {hotelname}</Text>
-        <Text style={styles.titles}>Price Per night: {price}</Text>
-        <View style={styles.dateContainer}>
-          <View style={styles.datePicker}>
-          <View style={styles.datePickerContainer}>
-  <View style={styles.datePicker}>
-    <DateTimePickerModal
-      isVisible={isCheckinDatePickerVisible}
-      mode="date"
-      onConfirm={handleCheckinConfirm}
-      onCancel={hideCheckinDatePicker}
-    />
-    <TextInput
-      style={styles.paymentInput}
-      placeholder="Check-in Date"
-      value={checkinDate ? format(checkinDate, 'dd/MM/yyyy') : ''}
-      editable={false}
-    />
-    <Pressable style={styles.dateButton} onPress={showCheckinDatePicker}>
-      <Text>Select</Text>
-    </Pressable>
-  </View>
-  <View style={styles.datePicker}>
-    <DateTimePickerModal
-      isVisible={isCheckoutDatePickerVisible}
-      mode="date"
-      onConfirm={handleCheckoutConfirm}
-      onCancel={hideCheckoutDatePicker}
-    />
-    <TextInput
-      style={styles.paymentInput}
-      placeholder="Check-out Date"
-      value={checkoutDate ? format(checkoutDate, 'dd/MM/yyyy') : ''}
-      editable={false}
-    />
-    <Pressable style={styles.dateButton} onPress={showCheckoutDatePicker}>
-      <Text>Select</Text>
-    </Pressable>
-    
-  </View>
-  <Text style={styles.titles}>Total Nights: {totalNights}</Text>
-        <Text style={styles.titles}>Total Price: {totalPrice}</Text>
-</View>
-
-          </View>
+          <Text style={styles.headerText}>Reservation form</Text>
         </View>
-       
-        <Text style={styles.paymentMethodText}>Choose Payment Method:</Text>
+        <View style={styles.containerBook}>
+          <Text style={styles.titles}> User Name : {name}</Text>
+          <Text style={styles.titles}>Email: {email}</Text>
+          <Text style={styles.titles}>Hotel Name : {hotelname}</Text>
+          <Text style={styles.titles}>Price Per night: {price}</Text>
+          <View style={styles.dateContainer}>
+            <View style={styles.datePicker}>
+              <View style={styles.datePickerContainer}>
+                <View style={styles.datePicker}>
+                  <DateTimePickerModal
+                    isVisible={isCheckinDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleCheckinConfirm}
+                    onCancel={hideCheckinDatePicker}
+                  />
+                  <TextInput
+                    style={styles.paymentInput}
+                    placeholder="Check-in Date"
+                    value={checkinDate ? format(checkinDate, 'dd/MM/yyyy') : ''}
+                    editable={false}
+                  />
+                  <Pressable style={styles.dateButton} onPress={showCheckinDatePicker}>
+                    <Text>Select</Text>
+                  </Pressable>
+                </View>
+                <View style={styles.datePicker}>
+                  <DateTimePickerModal
+                    isVisible={isCheckoutDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleCheckoutConfirm}
+                    onCancel={hideCheckoutDatePicker}
+                  />
+                  <TextInput
+                    style={styles.paymentInput}
+                    placeholder="Check-out Date"
+                    value={checkoutDate ? format(checkoutDate, 'dd/MM/yyyy') : ''}
+                    editable={false}
+                  />
+                  <Pressable style={styles.dateButton} onPress={showCheckoutDatePicker}>
+                    <Text>Select</Text>
+                  </Pressable>
 
-        <View style={styles.paymentOptions}>
-        <TouchableOpacity
-  style={[styles.paymentButton, paymentMethod === 'cash' && styles.selectedPayment]}
-  onPress={() => handlePaymentMethodChange('cash')}>
-  <Text>Cash</Text>
-</TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.paymentButton, paymentMethod === 'visa' && styles.selectedPayment]}
-            onPress={() => handlePaymentMethodChange('visa')}>
-            <Text>Visa</Text>
+                </View>
+                <Text style={styles.titles}>Total Nights: {totalNights}</Text>
+                <Text style={styles.titles}>Total Price: {totalPrice}</Text>
+              </View>
+
+            </View>
+          </View>
+
+          <Text style={styles.paymentMethodText}>Choose Payment Method:</Text>
+
+          <View style={styles.paymentOptions}>
+            <TouchableOpacity
+              style={[styles.paymentButton, paymentMethod === 'cash' && styles.selectedPayment]}
+              onPress={() => handlePaymentMethodChange('cash')}>
+              <Text>Cash</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.paymentButton, paymentMethod === 'visa' && styles.selectedPayment]}
+              onPress={() => handlePaymentMethodChange('visa')}>
+              <Text>Visa</Text>
+            </TouchableOpacity>
+          </View>
+          {paymentMethod === 'visa' && (
+            <View style={styles.paymentDetails}>
+              <TextInput
+                style={styles.paymentInput}
+                placeholder="Name"
+                value={paymentDetails.cardHolderName}
+                onChangeText={(text) => handlePaymentDetailsChange('cardHolderName', text)}
+              />
+              <TextInput
+                style={styles.paymentInput}
+                placeholder="Card Number"
+                keyboardType="numeric"
+                value={paymentDetails.visaNumber}
+                onChangeText={(text) => handlePaymentDetailsChange('visaNumber', text)}
+              />
+              <TextInput
+                style={styles.paymentInput}
+                placeholder="Expiry Date (MM/YY)"
+                maxLength={5} // Maximum length for MM/YY format
+                value={paymentDetails.expiryDate}
+                onChangeText={(text) => handlePaymentDetailsChange('expiryDate', text)}
+              />
+              <TextInput
+                style={styles.paymentInput}
+                placeholder="CVV"
+                keyboardType="numeric"
+                maxLength={3} // Maximum length for CVV
+                value={paymentDetails.cvv}
+                onChangeText={(text) => handlePaymentDetailsChange('cvv', text)}
+              />
+              <Text style={styles.paymentInput}>Amount: {totalPrice}</Text>
+            </View>
+          )}
+          <TouchableOpacity style={styles.bookButton} onPress={bookNow}>
+            <Text style={styles.bookTitle}>Book Now</Text>
           </TouchableOpacity>
         </View>
-        {paymentMethod === 'visa' && (
-          <View style={styles.paymentDetails}>
-             <TextInput
-    style={styles.paymentInput}
-    placeholder="Name"
-    value={paymentDetails.cardHolderName}
-    onChangeText={(text) => handlePaymentDetailsChange('cardHolderName', text)}
-  />
-   <TextInput
-    style={styles.paymentInput}
-    placeholder="Card Number"
-    keyboardType="numeric"
-    value={paymentDetails.visaNumber}
-    onChangeText={(text) => handlePaymentDetailsChange('visaNumber', text)}
-  />
-  <TextInput
-    style={styles.paymentInput}
-    placeholder="Expiry Date (MM/YY)"
-    maxLength={5} // Maximum length for MM/YY format
-    value={paymentDetails.expiryDate}
-    onChangeText={(text) => handlePaymentDetailsChange('expiryDate', text)}
-  />
-            <TextInput
-    style={styles.paymentInput}
-    placeholder="CVV"
-    keyboardType="numeric"
-    maxLength={3} // Maximum length for CVV
-    value={paymentDetails.cvv}
-    onChangeText={(text) => handlePaymentDetailsChange('cvv', text)}
-  />
-  <Text style={styles.paymentInput}>Amount: {totalPrice}</Text>
-          </View>
-        )}
-        <TouchableOpacity style={styles.bookButton} onPress={bookNow}>
-          <Text style={styles.bookTitle}>Book Now</Text>
-        </TouchableOpacity>
-      </View>
-      {/* </ImageBackground> */}
+        {/* </ImageBackground> */}
       </ScrollView>
     </View>
   );
@@ -341,7 +343,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 15,
-    paddingVertical:5,
+    paddingVertical: 5,
     fontFamily: "Arial",
     fontSize: 16,
   },
@@ -418,8 +420,8 @@ const styles = StyleSheet.create({
     fontSize: 20, // Set the font size to be bigger
     paddingVertical: 10, // Add padding top and bottom
   },
-  
-  
+
+
 });
 
 export default CalendarInput;
