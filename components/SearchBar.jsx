@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginRight: 10,
     paddingVertical: 10,
+    color:'white'
   },
   searchButton: {
     padding: 10,
