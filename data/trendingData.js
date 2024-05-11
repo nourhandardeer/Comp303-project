@@ -1,6 +1,6 @@
 import dahab from '../assets/images/dahab.jpg';
 import taba from '../assets/images/taba.jpg';
-import northCoast from '../assets/images/northCoast.jpg';
+import alx from '../assets/images/alx.jpg';
 import aswan from '../assets/images/aswan.jpg';
 const trendingData = [
     {
@@ -12,8 +12,8 @@ const trendingData = [
         image:taba 
     },
     {
-        title:"North coast",
-        image:northCoast 
+        title:"Alexandria",
+        image:alx  
     },
     {
         title:"Aswan",

@@ -1,17 +1,21 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image,TouchableOpacity } from 'react-native';
-import { collection, addDoc, getDocs, query, where , doc , setDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { collection, addDoc, getDocs,getDoc, updateDoc,deleteDoc,query, where ,doc, setDoc} from 'firebase/firestore';
+import { db, auth } from '../firebase/config';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useRouter, useLocalSearchParams ,router} from "expo-router";
 import {  RasSedrHotelsData } from '../data/RasSedrHotelsData';
 import Header from '../components/header';
+import AdminActions from '../components/AdminActions';
 
 const RasSedr = () => {
     const [hotels, setHotels] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const params = useLocalSearchParams();
+    const [isAdmin, setIsAdmin] = useState(false);
+  const [updatedPrice, setUpdatedPrice] = useState("");
+
 
     // useEffect(() => {
     //     const addHotelsToFirestore = async () => {
@@ -33,6 +37,27 @@ const RasSedr = () => {
     // }, []);
 
     useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          // Fetch user document from Firestore
+          const userDocRef = doc(db, 'users', auth.currentUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+  
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setIsAdmin(userData.admin || false);
+          } else {
+            console.error('User document does not exist.');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+  
+      fetchUserData();
+    }, []);
+
+    useEffect(() => {
         const fetchHotelsFromFirestore = async () => {
           try {
             const hotelsCollectionRef = collection(db, 'hotels');
@@ -47,6 +72,41 @@ const RasSedr = () => {
     
         fetchHotelsFromFirestore();
       }, []);
+
+      const handleUpdate = async (hotelId, updatedData) => {
+        try {
+          // Reference to the hotel document
+          const hotelRef = doc(db, 'hotels', hotelId.toString());
+          
+          // Fetch the hotel document snapshot
+          const hotelSnapshot = await getDoc(hotelRef);
+          
+          // Check if the hotel document exists
+          if (hotelSnapshot.exists()) {
+            // Update the hotel document in Firestore with the updated data
+            await updateDoc(hotelRef, updatedData);
+            
+            // Log a success message or perform additional actions if needed
+            console.log('Hotel updated successfully:', hotelId);
+          } else {
+            console.error('Hotel document not found:', hotelId);
+          }
+        } catch (error) {
+          console.error('Error updating hotel:', error);
+        }
+      };
+      
+      const handleDelete = async (hotelId) => {
+        try {
+          // Delete hotel document from Firestore
+          await deleteDoc(doc(db, 'hotels', hotelId.toString()));
+          
+          // Log a success message or perform additional actions if needed
+          console.log('Hotel deleted successfully:', hotelId);
+        } catch (error) {
+          console.error('Error deleting hotel:', error);
+        }
+      };
     
       const addToFavorites = (hotelId) => {
         // Check if the hotel is already in favorites
@@ -75,6 +135,16 @@ const RasSedr = () => {
               </View>
               <Text style={styles.hotelDescription}>{item.description}</Text>
               <Text style={styles.hotelPrice}>{item.price}</Text>
+              {isAdmin && (
+            <AdminActions
+              hotelId={item.id}
+              name={item.name}
+              description={item.description}
+              price={item.price}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
+          )}
             </View>
           </View>
         </TouchableOpacity>
